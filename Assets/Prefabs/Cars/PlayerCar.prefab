@@ -6925,7 +6925,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isUsingManualWheelConfig: 0
-  _downforce: 750
+  _downforce: 3000
   _frontLeftWheel: {fileID: 7657905970992002567}
   _frontRightWheel: {fileID: 7707933181805981301}
   _backLeftWheel: {fileID: 270898805263259575}
@@ -6934,6 +6934,7 @@ MonoBehaviour:
   _frontRightWheelMesh: {fileID: 479394767493666671}
   _backLeftWheelMesh: {fileID: 8789044526526958474}
   _backRightWheelMesh: {fileID: 591558466397701462}
+  _axleType: 0
   _engineTorque: 1700
   _brakeTorque: 1500
   _maxSteerAngle: 40

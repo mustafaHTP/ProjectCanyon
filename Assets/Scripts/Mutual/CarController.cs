@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
@@ -25,6 +26,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform _backRightWheelMesh;
 
     [Header("General Car Settings")]
+    [SerializeField] private AxleType _axleType;
     [SerializeField] private float _engineTorque = 500f;
     [SerializeField] private float _brakeTorque = 1500f;
     [SerializeField] private float _maxSteerAngle = 40f;
@@ -55,7 +57,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float driftValue = 1f;
 
     private const float MinForwardSpeed = 0.1f;
-
+    private const float MinMotorTorque = 0f;
     private SkidMarkController _skidMarkController;
     private CarSmokeController _carSmokeController;
     private LightController _lightController;
@@ -89,6 +91,13 @@ public class CarController : MonoBehaviour
     private bool _isDrifting;
 
     #endregion
+
+    private enum AxleType
+    {
+        FWD,
+        RWD,
+        AWD
+    }
 
     public bool IsDrifting => _isDrifting;
     public bool IsUsingAutoReverseGear
@@ -221,10 +230,10 @@ public class CarController : MonoBehaviour
 
     private void Gas(bool isGassing, bool isMovingForward)
     {
+        float currentTorque;
         if (isGassing)
         {
             bool isExceedingTopSpeed = _carRigidBody.velocity.magnitude > _topSpeed;
-            float currentTorque;
             if (isExceedingTopSpeed)
             {
                 currentTorque = 0f;
@@ -234,22 +243,17 @@ public class CarController : MonoBehaviour
                 currentTorque = _engineTorque;
             }
 
-            if (isMovingForward)
+            if (!isMovingForward)
             {
-                _backLeftWheel.motorTorque = currentTorque;
-                _backRightWheel.motorTorque = currentTorque;
-            }
-            else
-            {
-                _backLeftWheel.motorTorque = -currentTorque;
-                _backRightWheel.motorTorque = -currentTorque;
+                currentTorque *= -1;
             }
         }
         else
         {
-            _backLeftWheel.motorTorque = 0f;
-            _backRightWheel.motorTorque = 0f;
+            currentTorque = 0f;
         }
+
+        ApplyTorqueToWheels(currentTorque);
     }
 
     private void Handbrake(bool isHandbrakeInUse)
@@ -265,7 +269,7 @@ public class CarController : MonoBehaviour
             _carRigidBody.AddForce(_carRigidBody.velocity * -1f * _handbrakeForce);
 
             if (_carRigidBody.velocity.magnitude > minSpeedToDrift
-                && AreAllWheelsGrounded())
+                && AreWheelsGrounded())
             {
                 _isDrifting = true;
                 Drift();
@@ -289,7 +293,7 @@ public class CarController : MonoBehaviour
             {
                 if (Mathf.Abs(driftAxis) < driftOffset
                     || _carRigidBody.velocity.magnitude <= minSpeedToDrift
-                    || !AreAllWheelsGrounded())
+                    || !AreWheelsGrounded())
                 {
                     _isDrifting = false;
                 }
@@ -303,18 +307,78 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private bool AreAllWheelsGrounded()
+    /// <summary>
+    /// It is primarily used to maintain drift
+    /// If all wheels are not grounded, stop drift
+    /// </summary>
+    /// <returns></returns>
+    private bool AreWheelsGrounded()
     {
-        List<WheelCollider> wheelColliders = GetWheelCollidersAsList();
-        foreach (var wheel in wheelColliders)
+        List<WheelCollider> _wheelColliders = GetWheelCollidersAsList();
+        foreach (var _wheelCollider in _wheelColliders)
         {
-            if (!wheel.isGrounded)
-            {
-                return false;
-            }
+            if (!_wheelCollider.isGrounded) return false;
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Applies torque based on axle type, also if the wheel is not grounded,
+    /// it does not apply torque
+    /// </summary>
+    /// <param name="torqueAmount"></param>
+    private void ApplyTorqueToWheels(float torqueAmount)
+    {
+        switch (_axleType)
+        {
+            case AxleType.FWD:
+                _frontLeftWheel.motorTorque = _frontLeftWheel.isGrounded switch
+                {
+                    true => torqueAmount,
+                    _ => MinMotorTorque
+                };
+                _frontRightWheel.motorTorque = _frontRightWheel.isGrounded switch
+                {
+                    true => torqueAmount,
+                    _ => MinMotorTorque
+                };
+                break;
+            case AxleType.RWD:
+                _backLeftWheel.motorTorque = _backLeftWheel.isGrounded switch
+                {
+                    true => torqueAmount,
+                    _ => MinMotorTorque
+                };
+                _backRightWheel.motorTorque = _backRightWheel.isGrounded switch
+                {
+                    true => torqueAmount,
+                    _ => MinMotorTorque
+                };
+                break;
+            case AxleType.AWD:
+                _frontLeftWheel.motorTorque = _frontLeftWheel.isGrounded switch
+                {
+                    true => torqueAmount,
+                    _ => MinMotorTorque
+                };
+                _frontRightWheel.motorTorque = _frontRightWheel.isGrounded switch
+                {
+                    true => torqueAmount,
+                    _ => MinMotorTorque
+                };
+                _backLeftWheel.motorTorque = _backLeftWheel.isGrounded switch
+                {
+                    true => torqueAmount,
+                    _ => MinMotorTorque
+                };
+                _backRightWheel.motorTorque = _backRightWheel.isGrounded switch
+                {
+                    true => torqueAmount,
+                    _ => MinMotorTorque
+                };
+                break;
+        }
     }
 
     private void GetSidewaysFrictionInitialValues()

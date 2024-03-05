@@ -15,6 +15,7 @@ public class AIController : MonoBehaviour, IInput
     [SerializeField] private float _lengthBetweenFrontSensors;
     [SerializeField] private float _sensorAngle;
     [SerializeField] private float _sensorLength;
+    [SerializeField] private float _obstacleAvoidanceTimeout;
 
     [Header("Path Config")]
     [Space(5)]
@@ -36,6 +37,7 @@ public class AIController : MonoBehaviour, IInput
     private const float NeutralSteerMultiplier = 0f;
     private const string LayerMaskObstacle = "Obstacle";
 
+    private float _obstacleAvoidanceCounter = 0f;
     private bool _isAvoidingObstacle = false;
     private int _currentWaypointIndex = 0;
 
@@ -70,6 +72,22 @@ public class AIController : MonoBehaviour, IInput
         if (!_canMove) return;
 
         AvoidObstacle();
+
+        if (_isAvoidingObstacle)
+        {
+            print("OBSTACLE AVOID STATE");
+            _obstacleAvoidanceCounter += Time.deltaTime;
+        }
+        else
+        {
+            _obstacleAvoidanceCounter = 0f;
+        }
+
+        if (_obstacleAvoidanceCounter > _obstacleAvoidanceTimeout)
+        {
+            Debug.Log("GO BACK STATE");
+        }
+
         FollowPath();
 
         UpdateDefaultInputs();
@@ -77,50 +95,87 @@ public class AIController : MonoBehaviour, IInput
 
     private void AvoidObstacle()
     {
-        _isAvoidingObstacle = false;
         float steerMultiplier = 0f;
         LayerMask layerMask = LayerMask.GetMask(LayerMaskObstacle);
         RaycastHit middleSensorHit = default;
+        int numberOfSensorsDetectedObstacle = 0;
 
-        Vector3 sensorStartPosition = transform.position + _sensorStartPositionOffset;
+        Vector3 sensorStartPosition = transform.TransformPoint(_sensorStartPositionOffset);
 
         //Front Middle Sensor
         if (Physics.Raycast(sensorStartPosition, transform.forward, out RaycastHit hit, _sensorLength, layerMask))
         {
-            _isAvoidingObstacle = true;
+            ++numberOfSensorsDetectedObstacle;
             middleSensorHit = hit;
+            Debug.DrawRay(sensorStartPosition, transform.forward * _sensorLength, Color.red);
+        }
+        else
+        {
+            Debug.DrawRay(sensorStartPosition, transform.forward * _sensorLength, Color.green);
         }
 
-        sensorStartPosition.x -= _lengthBetweenFrontSensors;
+        sensorStartPosition -= _lengthBetweenFrontSensors * transform.right;
 
         //Front Left Sensor
         if (Physics.Raycast(sensorStartPosition, transform.forward, _sensorLength, layerMask))
         {
-            _isAvoidingObstacle = true;
+            ++numberOfSensorsDetectedObstacle;
             steerMultiplier += HighDegreeSteerMultiplier;
+            Debug.DrawRay(sensorStartPosition, transform.forward * _sensorLength, Color.red);
+        }
+        else
+        {
+            Debug.DrawRay(sensorStartPosition, transform.forward * _sensorLength, Color.green);
         }
 
         //Front Left Angled Sensor
         if (Physics.Raycast(sensorStartPosition, Quaternion.AngleAxis(-_sensorAngle, transform.up) * transform.forward, _sensorLength, layerMask))
         {
-            _isAvoidingObstacle = true;
+            ++numberOfSensorsDetectedObstacle;
             steerMultiplier += LowDegreeSteerMultiplier;
+            Debug.DrawRay(sensorStartPosition, Quaternion.AngleAxis(-_sensorAngle, transform.up) * transform.forward * _sensorLength, Color.red);
+        }
+        else
+        {
+            Debug.DrawRay(sensorStartPosition, Quaternion.AngleAxis(-_sensorAngle, transform.up) * transform.forward * _sensorLength, Color.green);
         }
 
-        sensorStartPosition.x += 2f * _lengthBetweenFrontSensors;
+        sensorStartPosition += 2f * _lengthBetweenFrontSensors * transform.right;
 
         //Front Right Sensor
         if (Physics.Raycast(sensorStartPosition, transform.forward, _sensorLength, layerMask))
         {
-            _isAvoidingObstacle = true;
+            ++numberOfSensorsDetectedObstacle;
             steerMultiplier += -1f * HighDegreeSteerMultiplier;
+            Debug.DrawRay(sensorStartPosition, transform.forward * _sensorLength, Color.red);
+        }
+        else
+        {
+            Debug.DrawRay(sensorStartPosition, transform.forward * _sensorLength, Color.green);
         }
 
         //Front Right Angled Sensor
         if (Physics.Raycast(sensorStartPosition, Quaternion.AngleAxis(_sensorAngle, transform.up) * transform.forward, _sensorLength, layerMask))
         {
-            _isAvoidingObstacle = true;
+            ++numberOfSensorsDetectedObstacle;
             steerMultiplier += -1f * LowDegreeSteerMultiplier;
+            Debug.DrawRay(sensorStartPosition, Quaternion.AngleAxis(_sensorAngle, transform.up) * transform.forward * _sensorLength, Color.red);
+        }
+        else
+        {
+            Debug.DrawRay(sensorStartPosition, Quaternion.AngleAxis(_sensorAngle, transform.up) * transform.forward * _sensorLength, Color.green);
+        }
+
+        //After process all raycast, check sensor hit count
+        print("SENSOR HIT: " + numberOfSensorsDetectedObstacle);
+        if (numberOfSensorsDetectedObstacle > 0)
+        {
+            _isAvoidingObstacle = true;
+        }
+        else
+        {
+            _isAvoidingObstacle = false;
+            return;
         }
 
         //STEER SECTION
