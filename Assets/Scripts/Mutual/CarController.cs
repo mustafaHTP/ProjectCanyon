@@ -108,6 +108,7 @@ public class CarController : MonoBehaviour
     public float WheelRadius => _backLeftWheel.radius;
     public float TopSpeed => _topSpeed;
     public float CurrentSpeed => _currentSpeed;
+    public bool IsGassing => _isGassing;
 
     private void Awake()
     {

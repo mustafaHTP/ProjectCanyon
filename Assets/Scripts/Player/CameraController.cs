@@ -64,7 +64,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         _activeCamera.GetComponent<ICinemachineCameraLogic>()?.PerformCameraLogic();
     }

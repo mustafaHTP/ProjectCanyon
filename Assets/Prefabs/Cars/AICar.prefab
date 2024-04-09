@@ -10,31 +10,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 342.9
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 21.25
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -62
+      value: 324.7
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071072
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.7071065
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -42,11 +42,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 886407094208155476, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1319037879280752260, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 2.908e-42
+      objectReference: {fileID: 0}
+    - target: {fileID: 1319037879280752260, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 6e-44
+      objectReference: {fileID: 0}
+    - target: {fileID: 1319037879280752260, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 6e-45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _downforce
+      value: 30000
       objectReference: {fileID: 0}
     - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: brakeTorque
@@ -88,9 +108,29 @@ PrefabInstance:
       propertyPath: frontWheelsStiffnessCurve.m_Curve.Array.data[1].outWeight
       value: 0.49333334
       objectReference: {fileID: 0}
+    - target: {fileID: 4724401921774978847, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5191943208133264017, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5510278192307751156, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: transmissionType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5887444339826804095, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 2.168e-42
+      objectReference: {fileID: 0}
+    - target: {fileID: 5887444339826804095, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 6e-44
+      objectReference: {fileID: 0}
+    - target: {fileID: 5887444339826804095, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 6e-45
       objectReference: {fileID: 0}
     - target: {fileID: 6432997406434366320, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_IsActive
@@ -132,15 +172,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47e0be7c2acde30498d5e1009acfaadd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canMove: 0
+  _canMove: 1
   _sensorStartPositionOffset: {x: 0, y: 0.7, z: 1.4}
   _lengthBetweenFrontSensors: 0.85
   _sensorAngle: 20
   _sensorLength: 30
+  _obstacleAvoidanceTimeout: 0
   _path: {fileID: 0}
   _isCircuitMode: 1
   _waypointGizmosRadius: 1
-  _waypointArriveErrorTolerance: 9
+  _waypointArriveErrorTolerance: 6
   _minSpeedToBrake: 7
   _minAngleBetweenWaypointToBrake: 20
   _minDistanceToWaypointToBrake: 20

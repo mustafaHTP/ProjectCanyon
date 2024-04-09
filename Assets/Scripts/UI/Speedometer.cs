@@ -51,7 +51,10 @@ public class Speedometer : MonoBehaviour
     {
         float currentSpeed = _carController.CurrentSpeed;
         float topSpeed = _carController.TopSpeed;
+        float normalizedSpeed = currentSpeed / topSpeed;
+        float roundedSpeed = Mathf.Round(normalizedSpeed * Mathf.Pow(10, 3)) / Mathf.Pow(10, 3);
+
         needle.localEulerAngles =
-            new Vector3(0, 0, Mathf.Lerp(minSpeedNeedleAngle, maxSpeedNeedleAngle, currentSpeed / topSpeed));
+            new Vector3(0, 0, Mathf.Lerp(minSpeedNeedleAngle, maxSpeedNeedleAngle, roundedSpeed));
     }
 }

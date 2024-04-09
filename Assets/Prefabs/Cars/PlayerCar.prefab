@@ -5388,6 +5388,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3291555901302145053
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2984022610944435699}
+  m_Layer: 0
+  m_Name: CameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2984022610944435699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3291555901302145053}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.75, z: 2.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 228965584439738508}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3475813497758701895
 GameObject:
   m_ObjectHideFlags: 0
@@ -6910,6 +6941,7 @@ Transform:
   - {fileID: 2277966023794166847}
   - {fileID: 5968942021216636379}
   - {fileID: 6813682367124382329}
+  - {fileID: 2984022610944435699}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3939325408800439286
@@ -6934,13 +6966,13 @@ MonoBehaviour:
   _frontRightWheelMesh: {fileID: 479394767493666671}
   _backLeftWheelMesh: {fileID: 8789044526526958474}
   _backRightWheelMesh: {fileID: 591558466397701462}
-  _axleType: 0
+  _axleType: 1
   _engineTorque: 1700
   _brakeTorque: 1500
   _maxSteerAngle: 40
   _handbrakeForce: 1000
   _topSpeed: 50
-  _isUsingBrakeToGoBack: 0
+  _isUsingBrakeToGoBack: 1
   frontWheelsStiffnessCurve:
     serializedVersion: 2
     m_Curve:
@@ -6992,7 +7024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _engineSound: {fileID: 4724401921774978847}
-  _minPitchValue: 0.8
+  _minPitchValue: 0.5
   _maxPitchValue: 2.5
   _nitroSound: {fileID: 5191943208133264017}
   _tireScreechSound: {fileID: 886407094208155476}
@@ -7106,6 +7138,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debugUI: {fileID: 0}
+  _spawnPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &7473134802063456951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7126,7 +7162,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7229190191780136019}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9774ca46f5276f44198bb4a87d0db7e9, type: 3}
   m_Name: 

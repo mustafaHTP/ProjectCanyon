@@ -72,22 +72,6 @@ public class AIController : MonoBehaviour, IInput
         if (!_canMove) return;
 
         AvoidObstacle();
-
-        if (_isAvoidingObstacle)
-        {
-            print("OBSTACLE AVOID STATE");
-            _obstacleAvoidanceCounter += Time.deltaTime;
-        }
-        else
-        {
-            _obstacleAvoidanceCounter = 0f;
-        }
-
-        if (_obstacleAvoidanceCounter > _obstacleAvoidanceTimeout)
-        {
-            Debug.Log("GO BACK STATE");
-        }
-
         FollowPath();
 
         UpdateDefaultInputs();
@@ -167,7 +151,6 @@ public class AIController : MonoBehaviour, IInput
         }
 
         //After process all raycast, check sensor hit count
-        print("SENSOR HIT: " + numberOfSensorsDetectedObstacle);
         if (numberOfSensorsDetectedObstacle > 0)
         {
             _isAvoidingObstacle = true;
