@@ -29,8 +29,6 @@ public class CameraController : MonoBehaviour
 
         _activeCameraIndex = newActiveCameraIndex;
         _activeCamera = _cameras[newActiveCameraIndex];
-
-        print("act. index:" + _activeCameraIndex);
     }
 
     private void Awake()

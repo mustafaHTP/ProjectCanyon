@@ -7007,11 +7007,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  driftOffset: 0.1
-  minSpeedToDrift: 5
-  frontStiffnessDrift: 1.2
-  backStiffnessDrift: 1
-  driftValue: 1.6
+  _driftThreshold: 0.01
+  _minSpeedToDrift: 5
+  _frontStiffnessDrift: 1.2
+  _backStiffnessDrift: 1
+  _wheelDriftStiffness: 1
 --- !u!114 &1055995431966942506
 MonoBehaviour:
   m_ObjectHideFlags: 0

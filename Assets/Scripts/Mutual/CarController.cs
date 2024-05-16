@@ -49,12 +49,12 @@ public class CarController : MonoBehaviour
     [Range(0f, 1f)]
     [Tooltip("Threshold value to start drift. It is calculated by" +
         " dot product of car's right vector and car's velocity.")]
-    private float driftOffset = 0.01f;
-    [SerializeField] private float minSpeedToDrift = 5f;
-    [SerializeField] private float frontStiffnessDrift = 1f;
-    [SerializeField] private float backStiffnessDrift = 1f;
+    private float _driftThreshold = 0.01f;
+    [SerializeField] private float _minSpeedToDrift = 5f;
+    [SerializeField] private float _frontStiffnessDrift = 1f;
+    [SerializeField] private float _backStiffnessDrift = 1f;
     [Tooltip("Wheels' stiffness value when drifting")]
-    [SerializeField] private float driftValue = 1f;
+    [SerializeField] private float _wheelDriftStiffness = 1f;
 
     private const float MinForwardSpeed = 0.1f;
     private const float MinMotorTorque = 0f;
@@ -269,7 +269,7 @@ public class CarController : MonoBehaviour
             //simulate braking
             _carRigidBody.AddForce(_carRigidBody.velocity * -1f * _handbrakeForce);
 
-            if (_carRigidBody.velocity.magnitude > minSpeedToDrift
+            if (_carRigidBody.velocity.magnitude > _minSpeedToDrift
                 && AreWheelsGrounded())
             {
                 _isDrifting = true;
@@ -289,11 +289,12 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            float driftAxis = Vector3.Dot(_carRigidBody.velocity, _carRigidBody.transform.right);
+            //float driftAxis = Vector3.Dot(_carRigidBody.velocity, _carRigidBody.transform.right);
+            float driftAxis = Vector3.Dot(_carRigidBody.velocity.normalized, _carRigidBody.transform.right);
             if (_isDrifting)
             {
-                if (Mathf.Abs(driftAxis) < driftOffset
-                    || _carRigidBody.velocity.magnitude <= minSpeedToDrift
+                if (Mathf.Abs(driftAxis) < _driftThreshold
+                    || _carRigidBody.velocity.magnitude <= _minSpeedToDrift
                     || !AreWheelsGrounded())
                 {
                     _isDrifting = false;
@@ -412,30 +413,30 @@ public class CarController : MonoBehaviour
         for (int i = 0; i < wheelColliders.Count; i++)
         {
             WheelFrictionCurve wheelFrictionCurve = wheelColliders[i].sidewaysFriction;
-            wheelFrictionCurve.asymptoteSlip = driftValue;
-            wheelFrictionCurve.asymptoteValue = driftValue;
-            wheelFrictionCurve.extremumValue = driftValue;
-            wheelFrictionCurve.extremumSlip = driftValue;
+            wheelFrictionCurve.asymptoteSlip = _wheelDriftStiffness;
+            wheelFrictionCurve.asymptoteValue = _wheelDriftStiffness;
+            wheelFrictionCurve.extremumValue = _wheelDriftStiffness;
+            wheelFrictionCurve.extremumSlip = _wheelDriftStiffness;
             wheelColliders[i].sidewaysFriction = wheelFrictionCurve;
         }
 
         //APPLY STIFFNESS
         //Front Wheels
         WheelFrictionCurve frictionCurve = _frontLeftWheel.sidewaysFriction;
-        frictionCurve.stiffness = frontStiffnessDrift;
+        frictionCurve.stiffness = _frontStiffnessDrift;
         _frontLeftWheel.sidewaysFriction = frictionCurve;
 
         frictionCurve = _frontRightWheel.sidewaysFriction;
-        frictionCurve.stiffness = frontStiffnessDrift;
+        frictionCurve.stiffness = _frontStiffnessDrift;
         _frontRightWheel.sidewaysFriction = frictionCurve;
 
         //Back Wheels
         frictionCurve = _backLeftWheel.sidewaysFriction;
-        frictionCurve.stiffness = backStiffnessDrift;
+        frictionCurve.stiffness = _backStiffnessDrift;
         _backLeftWheel.sidewaysFriction = frictionCurve;
 
         frictionCurve = _backRightWheel.sidewaysFriction;
-        frictionCurve.stiffness = backStiffnessDrift;
+        frictionCurve.stiffness = _backStiffnessDrift;
         _backRightWheel.sidewaysFriction = frictionCurve;
     }
 
