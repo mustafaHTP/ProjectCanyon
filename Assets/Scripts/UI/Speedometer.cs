@@ -10,9 +10,6 @@ public class Speedometer : MonoBehaviour
     [SerializeField] private float minSpeedNeedleAngle;
     [SerializeField] private float maxSpeedNeedleAngle;
 
-    [Header("Gear Number Object")]
-    [SerializeField] private TextMeshProUGUI gearNumberText;
-
     [Header("Car")]
     [SerializeField] private GameObject car;
 

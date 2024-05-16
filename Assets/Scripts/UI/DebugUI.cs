@@ -11,7 +11,6 @@ public class DebugUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _speedText;
     [SerializeField] private TextMeshProUGUI _driftDirectionText;
     [SerializeField] private TextMeshProUGUI _sidewaysFrictionValuesText;
-    [SerializeField] private TextMeshProUGUI _gearValuesText;
 
     [Header("Wheel Colliders")]
     [SerializeField] private WheelCollider _frontWheelCollider;
@@ -29,7 +28,6 @@ public class DebugUI : MonoBehaviour
         DisplaySpeed();
         DisplayDriftDirection();
         DisplaySidewaysFrictionValues();
-        DisplayGearValues();
     }
 
     private void DisplaySpeed()
@@ -61,18 +59,5 @@ public class DebugUI : MonoBehaviour
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}AsymptoteSlip: {_backWheelCollider.sidewaysFriction.asymptoteSlip}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}AsymptoteValue: {_backWheelCollider.sidewaysFriction.asymptoteValue}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}Stiffness: {_backWheelCollider.sidewaysFriction.stiffness}";
-    }
-
-    private void DisplayGearValues()
-    {
-        //int currentGear = _gearController.CurrentGear;
-        //float currentRPM = _carController.CurrentEngineRPM;
-        //float currentTorque = _carController.CurrentTorque;
-        //bool isEngineBraking = _gearController.IsEngineBraking;
-
-        //_gearValuesText.text = $"Gear: {currentGear}";
-        //_gearValuesText.text += $"{Environment.NewLine}RPM: {currentRPM:N0}";
-        //_gearValuesText.text += $"{Environment.NewLine}Torque: {currentTorque:N0}";
-        //_gearValuesText.text += $"{Environment.NewLine}Engine Brake: {isEngineBraking}";
     }
 }

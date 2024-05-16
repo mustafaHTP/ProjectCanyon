@@ -16,25 +16,21 @@ public class CameraController : MonoBehaviour
 
     public void SwitchCamera()
     {
-        ++_activeCameraIndex;
-        if (_activeCameraIndex == _cameras.Count)
+        int oldActiveCameraIndex = _activeCameraIndex;
+        int newActiveCameraIndex = oldActiveCameraIndex + 1;
+
+        if (newActiveCameraIndex == _cameras.Count)
         {
-            _activeCameraIndex = 0;
+            newActiveCameraIndex = 0;
         }
 
-        for (int i = 0; i < _cameras.Count; i++)
-        {
-            if (i == _activeCameraIndex)
-            {
-                _cameras[i].Priority = 20;
-            }
-            else
-            {
-                _cameras[i].Priority = 10;
-            }
-        }
+        _cameras[oldActiveCameraIndex].Priority = LowPriorityCameraValue;
+        _cameras[newActiveCameraIndex].Priority = HighPriorityCameraValue;
 
-        _activeCamera = _cameras[_activeCameraIndex];
+        _activeCameraIndex = newActiveCameraIndex;
+        _activeCamera = _cameras[newActiveCameraIndex];
+
+        print("act. index:" + _activeCameraIndex);
     }
 
     private void Awake()

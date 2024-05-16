@@ -7,7 +7,7 @@ public class LightController : MonoBehaviour
     [SerializeField] private List<Light> headlightFlares;
     [SerializeField] private List<Light> backLightFlares;
 
-    private bool _isHeadlightOn = true;
+    private bool _isHeadlightOn;
 
     public void TurnOnBackLights()
     {

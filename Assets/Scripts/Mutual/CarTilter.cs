@@ -4,12 +4,9 @@ public class CarTilter : MonoBehaviour
 {
     [Header("Car Body Tilt Settings")]
     [Space(5)]
-    [SerializeField] private MeshRenderer carBody;
-    [SerializeField] private GameObject nitroEffect;
-    [SerializeField] private GameObject headlightFlare;
-    [SerializeField] private GameObject backlightFlare;
-    [SerializeField] private float maxTiltAngle;
-    [SerializeField] private float tiltSpeed;
+    [SerializeField] private float _tiltSpeed;
+    [SerializeField] private float _maxTiltAngle;
+    [SerializeField] private Transform[] _objectsToBeTilted;
 
     private Rigidbody _rigidbody;
 
@@ -32,37 +29,23 @@ public class CarTilter : MonoBehaviour
     /// </summary>
     private void TiltCarBody()
     {
-        float dotResult = Vector3.Dot(_rigidbody.velocity.normalized, _rigidbody.transform.right.normalized);
-        float inversedDotResult = Mathf.InverseLerp(1, -1, dotResult);
-        float tiltAmount = Mathf.Lerp(-maxTiltAngle, maxTiltAngle, inversedDotResult);
+        CarController carController = GetComponent<CarController>();
+        float dotResult =
+            Vector3.Dot(_rigidbody.velocity, _rigidbody.transform.right.normalized);
+        float inversedDotResult = Mathf.InverseLerp(carController.TopSpeed, -carController.TopSpeed, dotResult);
+        float tiltAmount = Mathf.Lerp(-_maxTiltAngle, _maxTiltAngle, inversedDotResult);
 
-        //Tilt car body
-        Quaternion targetRotation = Quaternion.Euler(0f, 0f, tiltAmount);
-        Quaternion currentRotation = carBody.transform.localRotation;
-        carBody.transform.localRotation = Quaternion.Slerp(
-            currentRotation,
-            targetRotation,
-            tiltSpeed * Time.fixedDeltaTime);
-
-        //Tilt headlight flare
-        currentRotation = headlightFlare.transform.localRotation;
-        headlightFlare.transform.localRotation = Quaternion.Slerp(
-            currentRotation,
-            targetRotation,
-            tiltSpeed * Time.fixedDeltaTime);
-
-        //Tilt backlight flare
-        currentRotation = backlightFlare.transform.localRotation;
-        backlightFlare.transform.localRotation = Quaternion.Slerp(
-            currentRotation,
-            targetRotation,
-            tiltSpeed * Time.fixedDeltaTime);
-
-        //Tilt nitro effect
-        currentRotation = nitroEffect.transform.localRotation;
-        nitroEffect.transform.localRotation = Quaternion.Slerp(
-            currentRotation,
-            targetRotation,
-            tiltSpeed * Time.fixedDeltaTime);
+        foreach (Transform item in _objectsToBeTilted)
+        {
+            Quaternion targetRotation = Quaternion.Euler(
+                item.localEulerAngles.x, 
+                item.localEulerAngles.y, 
+                tiltAmount);
+            Quaternion currentRotation = item.localRotation;
+            item.transform.localRotation = Quaternion.Slerp(
+                currentRotation,
+                targetRotation,
+                _tiltSpeed * Time.fixedDeltaTime);
+        }
     }
 }
