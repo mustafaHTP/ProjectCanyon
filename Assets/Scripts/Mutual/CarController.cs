@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-
 public class CarController : MonoBehaviour
 {
     public const float MinSpeed = 0f;
@@ -54,7 +53,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float _frontStiffnessDrift = 1f;
     [SerializeField] private float _backStiffnessDrift = 1f;
     [Tooltip("Wheels' stiffness value when drifting")]
-    [SerializeField] private float _wheelDriftStiffness = 1f;
+    [SerializeField] private float _wheelDriftValue = 1f;
 
     private const float MinForwardSpeed = 0.1f;
     private const float MinMotorTorque = 0f;
@@ -413,10 +412,10 @@ public class CarController : MonoBehaviour
         for (int i = 0; i < wheelColliders.Count; i++)
         {
             WheelFrictionCurve wheelFrictionCurve = wheelColliders[i].sidewaysFriction;
-            wheelFrictionCurve.asymptoteSlip = _wheelDriftStiffness;
-            wheelFrictionCurve.asymptoteValue = _wheelDriftStiffness;
-            wheelFrictionCurve.extremumValue = _wheelDriftStiffness;
-            wheelFrictionCurve.extremumSlip = _wheelDriftStiffness;
+            wheelFrictionCurve.asymptoteSlip = _wheelDriftValue;
+            wheelFrictionCurve.asymptoteValue = _wheelDriftValue;
+            wheelFrictionCurve.extremumValue = _wheelDriftValue;
+            wheelFrictionCurve.extremumSlip = _wheelDriftValue;
             wheelColliders[i].sidewaysFriction = wheelFrictionCurve;
         }
 

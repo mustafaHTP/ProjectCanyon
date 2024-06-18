@@ -12,10 +12,10 @@ public class NitroController : MonoBehaviour
     [SerializeField] private List<TrailRenderer> tailLightTrailEffects;
 
     [Header("Nitro Settings")]
-    [SerializeField] private float maxNitroAmount;
-    [SerializeField] private float nitroReductionAmount;
-    [SerializeField] private float nitroIncreaseAmount;
-    [SerializeField] private float nitroRechargeDelayTime;
+    [SerializeField] private float _maxNitroAmount;
+    [SerializeField] private float _nitroReductionAmount;
+    [SerializeField] private float _nitroIncreaseAmount;
+    [SerializeField] private float _nitroRechargeDelayTime;
     [Range(1, 4)]
     [Tooltip("It is used multiply by default acceleration")]
     [SerializeField]
@@ -29,8 +29,8 @@ public class NitroController : MonoBehaviour
     private float _defaultRPMAcceleration;
     private bool _isUsingNitro;
 
-    public float MaxNitroAmount { get => maxNitroAmount; }
-    public float NitroReductionAmount { get => nitroReductionAmount; }
+    public float MaxNitroAmount { get => _maxNitroAmount; }
+    public float NitroReductionAmount { get => _nitroReductionAmount; }
     public float CurrentNitroAmount { get => _currentNitroAmount; }
     public bool IsUsingNitro { get => _isUsingNitro; }
 
@@ -39,7 +39,7 @@ public class NitroController : MonoBehaviour
         _carController = GetComponent<CarController>();
         _carSoundController = GetComponent<CarSoundController>();
         _input = GetComponent<IInput>();
-        _currentNitroAmount = maxNitroAmount;
+        _currentNitroAmount = _maxNitroAmount;
     }
 
     private void Update()
@@ -78,7 +78,7 @@ public class NitroController : MonoBehaviour
     private void StartNitro()
     {
         //Check there is enough nitro amount to play nitro
-        if (_currentNitroAmount - nitroReductionAmount > 0f)
+        if (HasEnoughNitro())
         {
             _isUsingNitro = true;
 
@@ -96,9 +96,14 @@ public class NitroController : MonoBehaviour
 
             _carSoundController.StopNitroSound();
             TurnOffVisualEffects();
-            Invoke(nameof(IncreaseNitro), nitroRechargeDelayTime);
+            Invoke(nameof(IncreaseNitro), _nitroRechargeDelayTime);
         }
 
+    }
+
+    private bool HasEnoughNitro()
+    {
+        return _currentNitroAmount - _nitroReductionAmount > 0f;
     }
 
     private void StopNitro()
@@ -148,13 +153,13 @@ public class NitroController : MonoBehaviour
 
     private void IncreaseNitro()
     {
-        _currentNitroAmount += nitroIncreaseAmount * Time.deltaTime;
-        _currentNitroAmount = _currentNitroAmount > maxNitroAmount ? maxNitroAmount : _currentNitroAmount;
+        _currentNitroAmount += _nitroIncreaseAmount * Time.deltaTime;
+        _currentNitroAmount = _currentNitroAmount > _maxNitroAmount ? _maxNitroAmount : _currentNitroAmount;
     }
 
     private void DecreaseNitro()
     {
-        _currentNitroAmount -= nitroReductionAmount * Time.deltaTime;
+        _currentNitroAmount -= _nitroReductionAmount * Time.deltaTime;
         _currentNitroAmount = _currentNitroAmount < 0 ? 0 : _currentNitroAmount;
     }
 }

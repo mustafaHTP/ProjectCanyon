@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446348182089246408}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.051803034, y: 0.7052053, z: -0.051802833, w: 0.7052081}
-  m_LocalPosition: {x: 219.90001, y: 21.26, z: 390.78995}
+  m_LocalRotation: {x: 0.04459826, y: 0.79121965, z: -0.05812122, w: 0.6071281}
+  m_LocalPosition: {x: 335.94696, y: 21.01, z: 330.33817}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -88,16 +88,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _carController: {fileID: 0}
   _applyThrottleBehavior: 1
-  _throttleDamping: {x: 0.5, y: 0.5, z: 0.5}
+  _throttleDamping: {x: 0.3, y: 0.3, z: 0.3}
   _throttleDampingSpeed: 0.1
   _applyDriftBehavior: 1
   _driftFollowOffset: {x: 0, y: 1, z: -5}
   _trackedOffsetChangeSpeed: 5
-  _steerXDamping: 4
+  _steerXDamping: 5
   _applyNitroBehavior: 1
   _nitroFOV: 120
   _defaultFOV: 60
-  _FOVChangeSpeed: 10
+  _FOVChangeSpeed: 5
   _applyNoiseBehavior: 1
   _minFrequencyGain: 0
   _maxFrequencyGain: 0.4
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446348182089246408}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
   m_Name: 
@@ -183,9 +183,9 @@ MonoBehaviour:
   m_YDamping: 0
   m_ZDamping: 0
   m_AngularDampingMode: 0
-  m_PitchDamping: 4
+  m_PitchDamping: 2
   m_YawDamping: 1.3
-  m_RollDamping: 4
+  m_RollDamping: 2
   m_AngularDamping: 0
 --- !u!114 &6245599451931623246
 MonoBehaviour:
@@ -352,8 +352,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3516915770259646348}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.09807676, y: 0.7002706, z: -0.09807634, w: 0.7002736}
-  m_LocalPosition: {x: 217.8, y: 21.25, z: 390.78995}
+  m_LocalRotation: {x: 0.0844364, y: 0.7856823, z: -0.11003864, w: 0.60288084}
+  m_LocalPosition: {x: 333.9185, y: 21, z: 330.88165}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -406,7 +406,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3516915770259646348}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
   m_Name: 
@@ -536,8 +536,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5806719128172569959}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14291924, y: 0.7513086, z: -0.1730133, w: 0.62062544}
-  m_LocalPosition: {x: 217.2, y: 23, z: 392.08997}
+  m_LocalRotation: {x: 0.119113915, y: 0.8258882, z: -0.19018747, w: 0.5172517}
+  m_LocalPosition: {x: 333.67538, y: 22.75, z: 332.29266}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -725,8 +725,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6805138036635232593}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20309065, y: 0.60706705, z: -0.16427872, w: 0.7504908}
-  m_LocalPosition: {x: 203.6, y: 31.91, z: 386.25992}
+  m_LocalRotation: {x: 0.17991093, y: 0.6998309, z: -0.18938161, w: 0.66483337}
+  m_LocalPosition: {x: 319.0299, y: 31.66, z: 330.18115}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -797,8 +797,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7310713007337699086}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071058, z: -0, w: 0.7071078}
-  m_LocalPosition: {x: 224.8, y: 20.89, z: 390.78998}
+  m_LocalRotation: {x: -0, y: 0.7933512, z: -0, w: 0.60876423}
+  m_LocalPosition: {x: 340.68, y: 20.64, z: 329.06998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -40,6 +40,7 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
     private NitroController _nitroController;
     private Vector3 _defaultFollowOffset;
     private float _defaultXDamping;
+    private float _deltaFOV;
 
     private float deltaDamping = 0f;
 
@@ -164,6 +165,7 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
     private void ApplyThrottleBehavior()
     {
         if (!_applyThrottleBehavior) return;
+
 
         if (_carController.IsGassing)
         {
