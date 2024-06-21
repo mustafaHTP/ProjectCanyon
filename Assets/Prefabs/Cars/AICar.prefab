@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 324.7
+      value: 323.2
       objectReference: {fileID: 0}
     - target: {fileID: 228965584439738508, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_BoundingSphereOverride.z
       value: 6e-45
       objectReference: {fileID: 0}
+    - target: {fileID: 2014858933134362507, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d2344366b80fe3d4f886ec412e0174fa, type: 2}
     - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: _downforce
       value: 30000
@@ -71,6 +75,10 @@ PrefabInstance:
     - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: brakeTorque
       value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _engineTorque
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: frontWheelsStiffnessCurve.m_Curve.Array.data[1].time
@@ -148,6 +156,7 @@ PrefabInstance:
     - {fileID: 6861454454419464252, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
     - {fileID: 6858233556759765839, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
     - {fileID: 3562521110618980054, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+    - {fileID: 6121611445855271725, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -181,7 +190,7 @@ MonoBehaviour:
   _path: {fileID: 0}
   _isCircuitMode: 1
   _waypointGizmosRadius: 1
-  _waypointArriveErrorTolerance: 6
+  _waypointArriveErrorTolerance: 7.9
   _minSpeedToBrake: 7
   _minAngleBetweenWaypointToBrake: 20
   _minDistanceToWaypointToBrake: 20

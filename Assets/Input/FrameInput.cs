@@ -1,10 +1,12 @@
 public class FrameInput
 {
-    public bool GasInput;
-    public bool BrakeInput;
+    public float GasInput;
+    public float BrakeInput;
     public bool NitroInput;
-    public bool HandbrakeInput;
+    public float HandbrakeInput;
     public float SteerInput;
     public bool ShiftUpInput;
     public bool ShiftDownInput;
+    public bool ChangeCameraInput;
+    public bool ToggleHeadligthInput;
 }

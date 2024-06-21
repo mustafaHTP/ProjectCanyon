@@ -1,42 +1,71 @@
+using System;
 using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DebugActionController : MonoBehaviour
 {
     [SerializeField] private GameObject _debugUI;
-    [SerializeField] private Transform[] _spawnPositions; 
+    [SerializeField] private GameObject _infoUI;
 
     private bool _isDebugUIOn = false;
+    private bool _isInfoUIOn = true;
+
+    private void Awake()
+    {
+        InitUI();
+    }
+
+    private void InitUI()
+    {
+        _debugUI.SetActive(_isDebugUIOn);
+        _infoUI.SetActive(_isInfoUIOn);
+    }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            ResetCarPosition();
+            ResetCarRotation();
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            ToggleDebugUI();
         }
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            ToggleDebugUI();
+            ToggleInfoUI();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetScene();
         }
     }
 
-    private void ResetCarPosition()
+    private void ResetScene()
+    {
+        int currentSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneBuildIndex);
+    }
+
+    private void ResetCarRotation()
     {
         transform.rotation = Quaternion.identity;
     }
 
     private void ToggleDebugUI()
     {
-        if (_isDebugUIOn)
-        {
-            _debugUI.SetActive(false);
-            _isDebugUIOn = false;
-        }
-        else
-        {
-            _debugUI.SetActive(true);
-            _isDebugUIOn = true;
-        }
+        _isDebugUIOn = !_isDebugUIOn;
+        _debugUI.SetActive(_isDebugUIOn);
+    }
+
+    private void ToggleInfoUI()
+    {
+        _isInfoUIOn = !_isInfoUIOn;
+        _infoUI.SetActive(_isInfoUIOn);
     }
 }

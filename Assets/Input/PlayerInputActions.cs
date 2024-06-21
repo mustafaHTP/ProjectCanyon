@@ -31,7 +31,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Gas"",
                     ""type"": ""Value"",
                     ""id"": ""8bc99fbb-7180-452e-86d8-c205046e80e6"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Analog"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -40,7 +40,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Brake"",
                     ""type"": ""Value"",
                     ""id"": ""f64e024e-a82f-470b-9afb-8a5a8292eaff"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Analog"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -65,12 +65,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Handbrake"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""9644b43d-ddfe-4105-8d0e-acd6ce389a86"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""ShiftUp"",
@@ -85,6 +85,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""ShiftDown"",
                     ""type"": ""Button"",
                     ""id"": ""62915afe-39c7-4b1d-aa81-ed3faaf08ce2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""1a3fe681-62c2-4c04-862b-d448dfda2aad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleHeadlight"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a051989-92d9-44eb-a245-c75d010c1e8a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -364,6 +382,72 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ShiftDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""18b86655-80e6-4bef-ba44-393b331bc68f"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30ee6bdd-40b1-418b-b9f9-be6da538db97"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6af6073-4900-4bbb-872e-d882c0dab69e"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0329ae8a-0f5f-48a8-a757-56acd2e41003"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleHeadlight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b23ec012-fcd5-4c99-9bf2-2fcbfced59d6"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleHeadlight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""999084c6-528f-4c33-91bf-0a5d647d7605"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleHeadlight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -958,6 +1042,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Handbrake = m_Player.FindAction("Handbrake", throwIfNotFound: true);
         m_Player_ShiftUp = m_Player.FindAction("ShiftUp", throwIfNotFound: true);
         m_Player_ShiftDown = m_Player.FindAction("ShiftDown", throwIfNotFound: true);
+        m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
+        m_Player_ToggleHeadlight = m_Player.FindAction("ToggleHeadlight", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1038,6 +1124,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Handbrake;
     private readonly InputAction m_Player_ShiftUp;
     private readonly InputAction m_Player_ShiftDown;
+    private readonly InputAction m_Player_ChangeCamera;
+    private readonly InputAction m_Player_ToggleHeadlight;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1049,6 +1137,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Handbrake => m_Wrapper.m_Player_Handbrake;
         public InputAction @ShiftUp => m_Wrapper.m_Player_ShiftUp;
         public InputAction @ShiftDown => m_Wrapper.m_Player_ShiftDown;
+        public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
+        public InputAction @ToggleHeadlight => m_Wrapper.m_Player_ToggleHeadlight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1079,6 +1169,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ShiftDown.started += instance.OnShiftDown;
             @ShiftDown.performed += instance.OnShiftDown;
             @ShiftDown.canceled += instance.OnShiftDown;
+            @ChangeCamera.started += instance.OnChangeCamera;
+            @ChangeCamera.performed += instance.OnChangeCamera;
+            @ChangeCamera.canceled += instance.OnChangeCamera;
+            @ToggleHeadlight.started += instance.OnToggleHeadlight;
+            @ToggleHeadlight.performed += instance.OnToggleHeadlight;
+            @ToggleHeadlight.canceled += instance.OnToggleHeadlight;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1104,6 +1200,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ShiftDown.started -= instance.OnShiftDown;
             @ShiftDown.performed -= instance.OnShiftDown;
             @ShiftDown.canceled -= instance.OnShiftDown;
+            @ChangeCamera.started -= instance.OnChangeCamera;
+            @ChangeCamera.performed -= instance.OnChangeCamera;
+            @ChangeCamera.canceled -= instance.OnChangeCamera;
+            @ToggleHeadlight.started -= instance.OnToggleHeadlight;
+            @ToggleHeadlight.performed -= instance.OnToggleHeadlight;
+            @ToggleHeadlight.canceled -= instance.OnToggleHeadlight;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1293,6 +1395,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnHandbrake(InputAction.CallbackContext context);
         void OnShiftUp(InputAction.CallbackContext context);
         void OnShiftDown(InputAction.CallbackContext context);
+        void OnChangeCamera(InputAction.CallbackContext context);
+        void OnToggleHeadlight(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

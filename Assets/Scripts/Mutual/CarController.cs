@@ -13,10 +13,10 @@ public class CarController : MonoBehaviour
     [SerializeField] private float _downforce;
 
     [Header("Wheel Colliders")]
-    [SerializeField] private WheelCollider _frontLeftWheel;
-    [SerializeField] private WheelCollider _frontRightWheel;
-    [SerializeField] private WheelCollider _backLeftWheel;
-    [SerializeField] private WheelCollider _backRightWheel;
+    [SerializeField] private WheelCollider _frontLeftWheelCollider;
+    [SerializeField] private WheelCollider _frontRightWheelCollider;
+    [SerializeField] private WheelCollider _backLeftWheelCollider;
+    [SerializeField] private WheelCollider _backRightWheelCollider;
 
     [Header("Wheel Meshes")]
     [SerializeField] private Transform _frontLeftWheelMesh;
@@ -29,10 +29,11 @@ public class CarController : MonoBehaviour
     [SerializeField] private float _engineTorque = 500f;
     [SerializeField] private float _brakeTorque = 1500f;
     [SerializeField] private float _maxSteerAngle = 40f;
+    [SerializeField] private float _steerSensitivity = 10f;
     [SerializeField] private float _handbrakeForce = 1000f;
     [SerializeField] private float _topSpeed = 50f;
     [Tooltip("If it is set to true, when the car is about to stop," +
-        " the brakes are applied and it reverses.")]
+        " car goes backwards.")]
     [SerializeField] private bool _isUsingBrakeToGoBack = false;
 
     /*
@@ -53,13 +54,15 @@ public class CarController : MonoBehaviour
     [SerializeField] private float _frontStiffnessDrift = 1f;
     [SerializeField] private float _backStiffnessDrift = 1f;
     [Tooltip("Wheels' stiffness value when drifting")]
-    [SerializeField] private float _wheelDriftValue = 1f;
+    [SerializeField] private float _wheelDriftStiffness = 1f;
 
-    private const float MinForwardSpeed = 0.1f;
     private const float MinMotorTorque = 0f;
-    private SkidMarkController _skidMarkController;
+    private const float MinBrakeTorque = 0f;
+
+    private CarSkidMarkController _skidMarkController;
     private CarSmokeController _carSmokeController;
-    private LightController _lightController;
+    private CarLightController _lightController;
+    private CarSoundController _carSoundController;
     private IInput _input;
     private Rigidbody _carRigidBody;
     private float _currentSpeed;
@@ -82,11 +85,9 @@ public class CarController : MonoBehaviour
     #endregion
 
     #region States
-
-    private bool _isGassing;
-    private bool _isBraking;
-    private bool _isHandbrakeInUse;
-    private bool _isMovingForward;
+    //It is used to prevent play handbrake sfx multiple times when handbrake engaged
+    private bool _hasReleasedHandbrake;
+    private bool _isApplyingReverseTorque;
     private bool _isDrifting;
 
     #endregion
@@ -99,85 +100,31 @@ public class CarController : MonoBehaviour
     }
 
     public bool IsDrifting => _isDrifting;
-    public bool IsUsingAutoReverseGear
-    {
-        get => _isUsingBrakeToGoBack;
-        set => _isUsingBrakeToGoBack = value;
-    }
-    public float WheelRadius => _backLeftWheel.radius;
     public float TopSpeed => _topSpeed;
     public float CurrentSpeed => _currentSpeed;
-    public bool IsGassing => _isGassing;
+    public WheelCollider FrontLeftWheelCollider => _frontLeftWheelCollider;
+    public WheelCollider FrontRightWheelCollider => _frontRightWheelCollider;
+    public WheelCollider BackLeftWheelCollider => _backLeftWheelCollider;
+    public WheelCollider BackRightWheelCollider => _backRightWheelCollider;
 
     private void Awake()
     {
         GetSidewaysFrictionInitialValues();
 
-        _lightController = GetComponent<LightController>();
-        _skidMarkController = GetComponent<SkidMarkController>();
+        _lightController = GetComponent<CarLightController>();
+        _skidMarkController = GetComponent<CarSkidMarkController>();
         _carSmokeController = GetComponent<CarSmokeController>();
+        _carSoundController = GetComponent<CarSoundController>();
         _carRigidBody = GetComponent<Rigidbody>();
         _input = GetComponent<IInput>();
     }
 
-    private void Update()
-    {
-        #region GasControl
-
-        if (_input.Input.GasInput)
-        {
-            _isGassing = true;
-            _isMovingForward = true;
-        }
-        else
-        {
-            _isGassing = false;
-        }
-
-        #endregion
-
-        #region BrakeControl
-
-        if (_input.Input.BrakeInput)
-        {
-            if (_isUsingBrakeToGoBack && !IsCarMovingForward()
-                || _isMovingForward == false)
-            {
-                _isBraking = false;
-                _isGassing = true;
-                _isMovingForward = false;
-            }
-            else
-            {
-                _isBraking = true;
-            }
-        }
-        else
-        {
-            _isBraking = false;
-        }
-
-        #endregion
-
-        #region HandbrakeControl
-
-        if (_input.Input.HandbrakeInput)
-        {
-            _isHandbrakeInUse = true;
-        }
-        else
-        {
-            _isHandbrakeInUse = false;
-        }
-
-        #endregion
-    }
-
     private void FixedUpdate()
     {
-        Gas(_isGassing, _isMovingForward);
-        Brake(_isBraking);
-        Handbrake(_isHandbrakeInUse);
+        DecideCarMovementDirection();
+        Gas();
+        Brake();
+        Handbrake();
         Steer();
         HelpSteer();
 
@@ -194,117 +141,134 @@ public class CarController : MonoBehaviour
         _currentFrontStiffness = frontWheelsStiffnessCurve.Evaluate(steerValue);
     }
 
-    private bool IsCarMovingForward()
-    {
-        Vector3 currentVelocityInWorld = GetComponent<Rigidbody>().velocity;
-        Vector3 currentVelocityInLocal = transform.InverseTransformDirection(currentVelocityInWorld);
-
-        return currentVelocityInLocal.z > MinForwardSpeed;
-    }
-
     private void Steer()
     {
         float targetSteerAngle = _maxSteerAngle * _input.Input.SteerInput;
 
-        _frontLeftWheel.steerAngle = Mathf.Lerp(_frontLeftWheel.steerAngle, targetSteerAngle, 0.5f);
-        _frontRightWheel.steerAngle = Mathf.Lerp(_frontLeftWheel.steerAngle, targetSteerAngle, 0.5f);
+        FrontLeftWheelCollider.steerAngle =
+            Mathf.Lerp(FrontLeftWheelCollider.steerAngle, targetSteerAngle, _steerSensitivity);
+        FrontRightWheelCollider.steerAngle =
+            Mathf.Lerp(FrontLeftWheelCollider.steerAngle, targetSteerAngle, _steerSensitivity);
     }
 
-    private void Brake(bool isBraking)
+    private void Brake()
     {
+        if (_isApplyingReverseTorque)
+        {
+            ApplyBrakeTorque(MinBrakeTorque);
+            _lightController.TurnOffBackLights();
+
+            return;
+        }
+
+        bool isBraking = _input.Input.BrakeInput switch
+        {
+            0f => false,
+            _ => true
+        };
+
         if (isBraking)
         {
             _lightController.TurnOnBackLights();
-
-            _backLeftWheel.brakeTorque = _brakeTorque;
-            _backRightWheel.brakeTorque = _brakeTorque;
         }
         else
         {
             _lightController.TurnOffBackLights();
-
-            _backLeftWheel.brakeTorque = 0f;
-            _backRightWheel.brakeTorque = 0f;
         }
+
+        float torqueToBeApplied = _brakeTorque * _input.Input.BrakeInput;
+        ApplyBrakeTorque(torqueToBeApplied);
     }
 
-    private void Gas(bool isGassing, bool isMovingForward)
+    private void Gas()
     {
-        float currentTorque;
-        if (isGassing)
+        if (HasExceededTopSpeed())
         {
-            bool isExceedingTopSpeed = _carRigidBody.velocity.magnitude > _topSpeed;
-            if (isExceedingTopSpeed)
-            {
-                currentTorque = 0f;
-            }
-            else
-            {
-                currentTorque = _engineTorque;
-            }
+            ApplyMotorTorque(MinMotorTorque);
+            return;
+        }
 
-            if (!isMovingForward)
-            {
-                currentTorque *= -1;
-            }
+        float torqueToBeApplied;
+
+        // To move backwards
+        if (_isApplyingReverseTorque)
+        {
+            torqueToBeApplied = -1f * _engineTorque * _input.Input.BrakeInput;
         }
         else
         {
-            currentTorque = 0f;
+            torqueToBeApplied = _engineTorque * _input.Input.GasInput;
         }
 
-        ApplyTorqueToWheels(currentTorque);
+        ApplyMotorTorque(torqueToBeApplied);
     }
 
-    private void Handbrake(bool isHandbrakeInUse)
+    private void Handbrake()
     {
         if (_isUsingManualWheelConfig) return;
 
-        /*
-         * To start drift all wheels must be grounded
-         * **/
-        if (isHandbrakeInUse)
+        bool isUsingHandbrake = _input.Input.HandbrakeInput != 0f;
+
+        // Update handbrake state and play SFX if necessary
+        if (isUsingHandbrake)
         {
-            //simulate braking
-            _carRigidBody.AddForce(_carRigidBody.velocity * -1f * _handbrakeForce);
+            HandleHandbrakeEngaged();
+        }
+        else
+        {
+            HandleHandbrakeReleased();
+        }
+    }
 
-            if (_carRigidBody.velocity.magnitude > _minSpeedToDrift
-                && AreWheelsGrounded())
-            {
-                _isDrifting = true;
-                Drift();
+    private void HandleHandbrakeReleased()
+    {
+        float driftAxis = Vector3.Dot(_carRigidBody.velocity.normalized, _carRigidBody.transform.right);
 
-                _skidMarkController.TurnOnEffect();
-                _carSmokeController.TurnOnEffect();
-            }
-            else
+        if (_isDrifting)
+        {
+            if (Mathf.Abs(driftAxis) < _driftThreshold
+                || _carRigidBody.velocity.magnitude <= _minSpeedToDrift
+                || !AreWheelsGrounded())
             {
                 _isDrifting = false;
-                Grip();
-
-                _skidMarkController.TurnOffEffect();
-                _carSmokeController.TurnOffEffect();
             }
         }
         else
         {
-            //float driftAxis = Vector3.Dot(_carRigidBody.velocity, _carRigidBody.transform.right);
-            float driftAxis = Vector3.Dot(_carRigidBody.velocity.normalized, _carRigidBody.transform.right);
-            if (_isDrifting)
-            {
-                if (Mathf.Abs(driftAxis) < _driftThreshold
-                    || _carRigidBody.velocity.magnitude <= _minSpeedToDrift
-                    || !AreWheelsGrounded())
-                {
-                    _isDrifting = false;
-                }
-            }
-            else
-            {
-                _skidMarkController.TurnOffEffect();
-                _carSmokeController.TurnOffEffect();
-                Grip();
-            }
+            _skidMarkController.TurnOffEffect();
+            _carSmokeController.TurnOffEffect();
+            Grip();
+        }
+
+        _hasReleasedHandbrake = true;
+    }
+
+    private void HandleHandbrakeEngaged()
+    {
+        if (_hasReleasedHandbrake)
+        {
+            _carSoundController.PlayHandbrakeSFX();
+            _hasReleasedHandbrake = false;
+        }
+
+        // Simulate braking
+        _carRigidBody.AddForce(_carRigidBody.velocity * -1f * _handbrakeForce);
+
+        if (_carRigidBody.velocity.magnitude > _minSpeedToDrift && AreWheelsGrounded())
+        {
+            _isDrifting = true;
+            Drift();
+
+            _skidMarkController.TurnOnEffect();
+            _carSmokeController.TurnOnEffect();
+        }
+        else
+        {
+            _isDrifting = false;
+            Grip();
+
+            _skidMarkController.TurnOffEffect();
+            _carSmokeController.TurnOffEffect();
         }
     }
 
@@ -328,77 +292,121 @@ public class CarController : MonoBehaviour
     /// Applies torque based on axle type, also if the wheel is not grounded,
     /// it does not apply torque
     /// </summary>
-    /// <param name="torqueAmount"></param>
-    private void ApplyTorqueToWheels(float torqueAmount)
+    /// <param name="motorTorqueAmount"></param>
+    private void ApplyMotorTorque(float motorTorqueAmount)
     {
         switch (_axleType)
         {
             case AxleType.FWD:
-                _frontLeftWheel.motorTorque = _frontLeftWheel.isGrounded switch
+                FrontLeftWheelCollider.motorTorque = FrontLeftWheelCollider.isGrounded switch
                 {
-                    true => torqueAmount,
+                    true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                _frontRightWheel.motorTorque = _frontRightWheel.isGrounded switch
+                FrontRightWheelCollider.motorTorque = FrontRightWheelCollider.isGrounded switch
                 {
-                    true => torqueAmount,
+                    true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
                 break;
             case AxleType.RWD:
-                _backLeftWheel.motorTorque = _backLeftWheel.isGrounded switch
+                BackLeftWheelCollider.motorTorque = BackLeftWheelCollider.isGrounded switch
                 {
-                    true => torqueAmount,
+                    true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                _backRightWheel.motorTorque = _backRightWheel.isGrounded switch
+                BackRightWheelCollider.motorTorque = BackRightWheelCollider.isGrounded switch
                 {
-                    true => torqueAmount,
+                    true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
                 break;
             case AxleType.AWD:
-                _frontLeftWheel.motorTorque = _frontLeftWheel.isGrounded switch
+                FrontLeftWheelCollider.motorTorque = FrontLeftWheelCollider.isGrounded switch
                 {
-                    true => torqueAmount,
+                    true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                _frontRightWheel.motorTorque = _frontRightWheel.isGrounded switch
+                FrontRightWheelCollider.motorTorque = FrontRightWheelCollider.isGrounded switch
                 {
-                    true => torqueAmount,
+                    true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                _backLeftWheel.motorTorque = _backLeftWheel.isGrounded switch
+                BackLeftWheelCollider.motorTorque = BackLeftWheelCollider.isGrounded switch
                 {
-                    true => torqueAmount,
+                    true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                _backRightWheel.motorTorque = _backRightWheel.isGrounded switch
+                BackRightWheelCollider.motorTorque = BackRightWheelCollider.isGrounded switch
                 {
-                    true => torqueAmount,
+                    true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
                 break;
         }
     }
 
+    private void ApplyBrakeTorque(float brakeTorqueAmount)
+    {
+        BackLeftWheelCollider.brakeTorque = brakeTorqueAmount;
+        BackRightWheelCollider.brakeTorque = brakeTorqueAmount;
+    }
+
+    private bool IsCarAboutToStop()
+    {
+        return _carRigidBody.velocity.magnitude < 0.1f;
+    }
+
+    /// <summary>
+    /// Decide car movement forward or backward
+    /// when car is about to stop, pressing brake goes backward
+    /// </summary>
+    private void DecideCarMovementDirection()
+    {
+        bool isBraking = _input.Input.BrakeInput switch
+        {
+            0f => false,
+            _ => true
+        };
+
+        bool isGassing = _input.Input.GasInput switch
+        {
+            0f => false,
+            _ => true
+        };
+
+        if (isGassing)
+        {
+            _isApplyingReverseTorque = false;
+        }
+        else if (IsCarAboutToStop() && isBraking)
+        {
+            _isApplyingReverseTorque = true;
+        }
+    }
+
+    private bool HasExceededTopSpeed()
+    {
+        return _carRigidBody.velocity.magnitude > TopSpeed;
+    }
+
     private void GetSidewaysFrictionInitialValues()
     {
-        _initialExtremumSlip = _frontLeftWheel.sidewaysFriction.extremumSlip;
-        _initialExtremumValue = _frontLeftWheel.sidewaysFriction.extremumValue;
-        _initialAsymptoteSlip = _frontLeftWheel.sidewaysFriction.asymptoteSlip;
-        _initialAsymptoteValue = _frontLeftWheel.sidewaysFriction.asymptoteValue;
-        _initialRearStiffness = _backLeftWheel.sidewaysFriction.stiffness;
+        _initialExtremumSlip = FrontLeftWheelCollider.sidewaysFriction.extremumSlip;
+        _initialExtremumValue = FrontLeftWheelCollider.sidewaysFriction.extremumValue;
+        _initialAsymptoteSlip = FrontLeftWheelCollider.sidewaysFriction.asymptoteSlip;
+        _initialAsymptoteValue = FrontLeftWheelCollider.sidewaysFriction.asymptoteValue;
+        _initialRearStiffness = BackLeftWheelCollider.sidewaysFriction.stiffness;
     }
 
     private List<WheelCollider> GetWheelCollidersAsList()
     {
         List<WheelCollider> wheelColliders = new()
         {
-            _frontLeftWheel,
-            _frontRightWheel,
-            _backLeftWheel,
-            _backRightWheel
+            FrontLeftWheelCollider,
+            FrontRightWheelCollider,
+            BackLeftWheelCollider,
+            BackRightWheelCollider
         };
 
         return wheelColliders;
@@ -412,38 +420,38 @@ public class CarController : MonoBehaviour
         for (int i = 0; i < wheelColliders.Count; i++)
         {
             WheelFrictionCurve wheelFrictionCurve = wheelColliders[i].sidewaysFriction;
-            wheelFrictionCurve.asymptoteSlip = _wheelDriftValue;
-            wheelFrictionCurve.asymptoteValue = _wheelDriftValue;
-            wheelFrictionCurve.extremumValue = _wheelDriftValue;
-            wheelFrictionCurve.extremumSlip = _wheelDriftValue;
+            wheelFrictionCurve.asymptoteSlip = _wheelDriftStiffness;
+            wheelFrictionCurve.asymptoteValue = _wheelDriftStiffness;
+            wheelFrictionCurve.extremumValue = _wheelDriftStiffness;
+            wheelFrictionCurve.extremumSlip = _wheelDriftStiffness;
             wheelColliders[i].sidewaysFriction = wheelFrictionCurve;
         }
 
         //APPLY STIFFNESS
         //Front Wheels
-        WheelFrictionCurve frictionCurve = _frontLeftWheel.sidewaysFriction;
+        WheelFrictionCurve frictionCurve = FrontLeftWheelCollider.sidewaysFriction;
         frictionCurve.stiffness = _frontStiffnessDrift;
-        _frontLeftWheel.sidewaysFriction = frictionCurve;
+        FrontLeftWheelCollider.sidewaysFriction = frictionCurve;
 
-        frictionCurve = _frontRightWheel.sidewaysFriction;
+        frictionCurve = FrontRightWheelCollider.sidewaysFriction;
         frictionCurve.stiffness = _frontStiffnessDrift;
-        _frontRightWheel.sidewaysFriction = frictionCurve;
+        FrontRightWheelCollider.sidewaysFriction = frictionCurve;
 
         //Back Wheels
-        frictionCurve = _backLeftWheel.sidewaysFriction;
+        frictionCurve = BackLeftWheelCollider.sidewaysFriction;
         frictionCurve.stiffness = _backStiffnessDrift;
-        _backLeftWheel.sidewaysFriction = frictionCurve;
+        BackLeftWheelCollider.sidewaysFriction = frictionCurve;
 
-        frictionCurve = _backRightWheel.sidewaysFriction;
+        frictionCurve = BackRightWheelCollider.sidewaysFriction;
         frictionCurve.stiffness = _backStiffnessDrift;
-        _backRightWheel.sidewaysFriction = frictionCurve;
+        BackRightWheelCollider.sidewaysFriction = frictionCurve;
     }
 
-    /*
-     * Both front and rear wheels have same initial values
-     * Except stiffness because rear wheels stiffness value causes
-     * for front wheels too much grip 
-     * **/
+    /// <summary>
+    /// Both front and rear wheels have same initial values
+    /// Except stiffness because rear wheels stiffness value causes
+    /// for front wheels too much grip 
+    /// </summary>
     private void Grip()
     {
         List<WheelCollider> wheelColliders = GetWheelCollidersAsList();
@@ -459,39 +467,38 @@ public class CarController : MonoBehaviour
 
         //APPLY STIFFNESS
         //Front Wheels
-        WheelFrictionCurve frictionCurve = _frontLeftWheel.sidewaysFriction;
+        WheelFrictionCurve frictionCurve = FrontLeftWheelCollider.sidewaysFriction;
         //frictionCurve.stiffness = _initialFrontStiffness;
         frictionCurve.stiffness = _currentFrontStiffness;
-        _frontLeftWheel.sidewaysFriction = frictionCurve;
+        FrontLeftWheelCollider.sidewaysFriction = frictionCurve;
 
-        frictionCurve = _frontRightWheel.sidewaysFriction;
+        frictionCurve = FrontRightWheelCollider.sidewaysFriction;
         //frictionCurve.stiffness = _initialFrontStiffness;
         frictionCurve.stiffness = _currentFrontStiffness;
-        _frontRightWheel.sidewaysFriction = frictionCurve;
+        FrontRightWheelCollider.sidewaysFriction = frictionCurve;
 
         //Back Wheels
-        frictionCurve = _backLeftWheel.sidewaysFriction;
+        frictionCurve = BackLeftWheelCollider.sidewaysFriction;
         frictionCurve.stiffness = _initialRearStiffness;
-        _backLeftWheel.sidewaysFriction = frictionCurve;
+        BackLeftWheelCollider.sidewaysFriction = frictionCurve;
 
-        frictionCurve = _backRightWheel.sidewaysFriction;
+        frictionCurve = BackRightWheelCollider.sidewaysFriction;
         frictionCurve.stiffness = _initialRearStiffness;
-        _backRightWheel.sidewaysFriction = frictionCurve;
+        BackRightWheelCollider.sidewaysFriction = frictionCurve;
     }
 
     private void SyncWheelMeshesWithColliders()
     {
-        SyncWheelMeshWithCollider(_frontLeftWheel, _frontLeftWheelMesh);
-        SyncWheelMeshWithCollider(_frontRightWheel, _frontRightWheelMesh);
-        SyncWheelMeshWithCollider(_backLeftWheel, _backLeftWheelMesh);
-        SyncWheelMeshWithCollider(_backRightWheel, _backRightWheelMesh);
+        SyncWheelMeshWithCollider(FrontLeftWheelCollider, _frontLeftWheelMesh);
+        SyncWheelMeshWithCollider(FrontRightWheelCollider, _frontRightWheelMesh);
+        SyncWheelMeshWithCollider(BackLeftWheelCollider, _backLeftWheelMesh);
+        SyncWheelMeshWithCollider(BackRightWheelCollider, _backRightWheelMesh);
     }
 
     private void SyncWheelMeshWithCollider(WheelCollider wheelCollider, Transform wheelMesh)
     {
         wheelCollider.GetWorldPose(out Vector3 wheelColliderPosition, out Quaternion wheelColliderQuaternion);
 
-        wheelMesh.position = wheelColliderPosition;
-        wheelMesh.rotation = wheelColliderQuaternion;
+        wheelMesh.SetPositionAndRotation(wheelColliderPosition, wheelColliderQuaternion);
     }
 }

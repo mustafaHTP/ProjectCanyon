@@ -2,16 +2,19 @@ using UnityEngine;
 
 public class CarSoundController : MonoBehaviour
 {
-    [Header("Engine Sound")]
-    [SerializeField] private AudioSource _engineSound;
+    [Header("Engine SFX")]
+    [SerializeField] private AudioSource _engineSFX;
     [SerializeField] private float _minPitchValue = 0.8f;
     [SerializeField] private float _maxPitchValue = 2.5f;
 
-    [Header("Nitro Sound")]
-    [SerializeField] private AudioSource _nitroSound;
+    [Header("Nitro SFX")]
+    [SerializeField] private AudioSource _nitroSFX;
 
-    [Header("Tire Screech Sound")]
-    [SerializeField] private AudioSource _tireScreechSound;
+    [Header("Tire Screech SFX")]
+    [SerializeField] private AudioSource _tireScreechSFX;
+
+    [Header("Handbrake SFX")]
+    [SerializeField] private AudioSource _handbrakeSFX;
 
     private CarController _carController;
 
@@ -22,10 +25,10 @@ public class CarSoundController : MonoBehaviour
 
     private void Update()
     {
-        PlayEngineSound();
+        PlayEngineSFX();
     }
 
-    public void PlayEngineSound()
+    public void PlayEngineSFX()
     {
         float minSpeed = CarController.MinSpeed;
         float topSpeed = _carController.TopSpeed;
@@ -34,47 +37,55 @@ public class CarSoundController : MonoBehaviour
         float inverseRPM = Mathf.InverseLerp(minSpeed, topSpeed, currentSpeed);
         float currentEngineSoundPitch = Mathf.Lerp(_minPitchValue, _maxPitchValue, inverseRPM);
 
-        _engineSound.pitch = currentEngineSoundPitch;
+        _engineSFX.pitch = currentEngineSoundPitch;
 
-        if (!_engineSound.isPlaying)
-            _engineSound.Play();
+        if (!_engineSFX.isPlaying)
+            _engineSFX.Play();
     }
 
-    public void StopEngineSound()
+    public void StopEngineSFX()
     {
-        if (_engineSound.isPlaying)
-            _engineSound.Stop();
+        if (_engineSFX.isPlaying)
+            _engineSFX.Stop();
     }
 
-    public void PlayNitroSound()
+    public void PlayNitroSFX()
     {
-        if (!_nitroSound.isPlaying)
+        if (!_nitroSFX.isPlaying)
         {
-            _nitroSound.Play();
+            _nitroSFX.Play();
         }
     }
 
-    public void StopNitroSound()
+    public void StopNitroSFX()
     {
-        if (_nitroSound.isPlaying)
+        if (_nitroSFX.isPlaying)
         {
-            _nitroSound.Stop();
+            _nitroSFX.Stop();
         }
     }
 
-    public void PlayTireScreechSound()
+    public void PlayTireScreechSFX()
     {
-        if (!_tireScreechSound.isPlaying)
+        if (!_tireScreechSFX.isPlaying)
         {
-            _tireScreechSound.Play();
+            _tireScreechSFX.Play();
         }
     }
 
-    public void StopTireScreechSound()
+    public void StopTireScreechSFX()
     {
-        if (_tireScreechSound.isPlaying)
+        if (_tireScreechSFX.isPlaying)
         {
-            _tireScreechSound.Stop();
+            _tireScreechSFX.Stop();
+        }
+    }
+
+    public void PlayHandbrakeSFX()
+    {
+        if (!_handbrakeSFX.isPlaying)
+        {
+            _handbrakeSFX.Play();
         }
     }
 }

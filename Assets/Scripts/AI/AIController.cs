@@ -28,8 +28,13 @@ public class AIController : MonoBehaviour, IInput
     [SerializeField] private float _minDistanceToWaypointToBrake = 10f;
 
     private const float MinSteerInput = -1f;
+    private const float MinGasInput = 0f;
+    private const float MinBrakeInput = 0f;
+    private const float MinHandbrakeInput = 0f;
     private const float NeutralSteerInput = 0f;
     private const float MaxSteerInput = 1f;
+    private const float MaxGasInput = 1f;
+    private const float MaxBrakeInput = 1f;
     private const float HighDegreeSteerMultiplier = 20f;
     private const float LowDegreeSteerMultiplier = 10f;
     private const float MinSteerMultiplier = -30f;
@@ -256,14 +261,14 @@ public class AIController : MonoBehaviour, IInput
 
     private void Gas()
     {
-        Input.GasInput = true;
-        Input.BrakeInput = false;
+        Input.GasInput = MaxGasInput;
+        Input.BrakeInput = MinBrakeInput;
     }
 
     private void Brake()
     {
-        Input.GasInput = false;
-        Input.BrakeInput = true;
+        Input.GasInput = MinGasInput;
+        Input.BrakeInput = MaxBrakeInput;
     }
 
     private bool HasArrivedWaypoint()
@@ -294,7 +299,7 @@ public class AIController : MonoBehaviour, IInput
 
     private void UpdateDefaultInputs()
     {
-        Input.HandbrakeInput = false;
+        Input.HandbrakeInput = MinHandbrakeInput;
         Input.NitroInput = false;
         Input.ShiftDownInput = false;
         Input.ShiftUpInput = false;

@@ -5622,7 +5622,7 @@ Transform:
   m_GameObject: {fileID: 3710628268254271945}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.548, y: 0.89, z: -2.514}
+  m_LocalPosition: {x: 0.5429971, y: 0.89, z: -2.2000046}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5637,11 +5637,11 @@ TrailRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3710628268254271945}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
-  m_MotionVectors: 0
+  m_MotionVectors: 2
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
@@ -5670,7 +5670,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 3
+  m_Time: 0.1
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -5764,6 +5764,7 @@ Transform:
   - {fileID: 6968022916644220473}
   - {fileID: 4549610980318178525}
   - {fileID: 136335144915952943}
+  - {fileID: 3493255784671887057}
   m_Father: {fileID: 228965584439738508}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3862887699877517968
@@ -6290,7 +6291,7 @@ GameObject:
   - component: {fileID: 136335144915952943}
   - component: {fileID: 886407094208155476}
   m_Layer: 0
-  m_Name: TireScreechSound
+  m_Name: SFX_TireScreech
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6451,7 +6452,7 @@ GameObject:
   - component: {fileID: 6968022916644220473}
   - component: {fileID: 4724401921774978847}
   m_Layer: 0
-  m_Name: EngineSound
+  m_Name: SFX_Engine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6706,6 +6707,134 @@ Transform:
   - {fileID: 4973178976803893671}
   m_Father: {fileID: 5501687630549497222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6834255887907021162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3493255784671887057}
+  - component: {fileID: 6163681889507519855}
+  m_Layer: 0
+  m_Name: SFX_Handbrake
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3493255784671887057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6834255887907021162}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6813682367124382329}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &6163681889507519855
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6834255887907021162}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 02b57788fd9fb3749b6b1151d0bf24dc, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7094633434930947693
 GameObject:
   m_ObjectHideFlags: 0
@@ -6916,7 +7045,7 @@ GameObject:
   - component: {fileID: 6861454454419464252}
   - component: {fileID: 5020401722084527508}
   - component: {fileID: 2148649361835975724}
-  - component: {fileID: 1322089861111074623}
+  - component: {fileID: 6121611445855271725}
   m_Layer: 0
   m_Name: PlayerCar
   m_TagString: Untagged
@@ -6959,10 +7088,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isUsingManualWheelConfig: 0
   _downforce: 3000
-  _frontLeftWheel: {fileID: 7657905970992002567}
-  _frontRightWheel: {fileID: 7707933181805981301}
-  _backLeftWheel: {fileID: 270898805263259575}
-  _backRightWheel: {fileID: 5424818279817026606}
+  _frontLeftWheelCollider: {fileID: 7657905970992002567}
+  _frontRightWheelCollider: {fileID: 7707933181805981301}
+  _backLeftWheelCollider: {fileID: 270898805263259575}
+  _backRightWheelCollider: {fileID: 5424818279817026606}
   _frontLeftWheelMesh: {fileID: 288835749619202467}
   _frontRightWheelMesh: {fileID: 479394767493666671}
   _backLeftWheelMesh: {fileID: 8789044526526958474}
@@ -6971,6 +7100,7 @@ MonoBehaviour:
   _engineTorque: 1700
   _brakeTorque: 1500
   _maxSteerAngle: 40
+  _steerSensitivity: 0.5
   _handbrakeForce: 1000
   _topSpeed: 50
   _isUsingBrakeToGoBack: 1
@@ -7024,11 +7154,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f0e4710b23a0b24b824ad176c9c9f39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _engineSound: {fileID: 4724401921774978847}
+  _engineSFX: {fileID: 4724401921774978847}
   _minPitchValue: 0.5
   _maxPitchValue: 2.5
-  _nitroSound: {fileID: 5191943208133264017}
-  _tireScreechSound: {fileID: 886407094208155476}
+  _nitroSFX: {fileID: 5191943208133264017}
+  _tireScreechSFX: {fileID: 886407094208155476}
+  _handbrakeSFX: {fileID: 6163681889507519855}
 --- !u!114 &6259610614737806554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7048,10 +7179,10 @@ MonoBehaviour:
   tailLightTrailEffects:
   - {fileID: 8144743236164917004}
   - {fileID: 1695887351363193958}
-  maxNitroAmount: 100
-  nitroReductionAmount: 20
-  nitroIncreaseAmount: 10
-  nitroRechargeDelayTime: 3
+  _maxNitroAmount: 100
+  _nitroReductionAmount: 20
+  _nitroIncreaseAmount: 10
+  _nitroRechargeDelayTime: 5
   accelerationMultiplier: 2
 --- !u!114 &6858233556759765839
 MonoBehaviour:
@@ -7065,7 +7196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3094ebf6618f75f4095c3580a5b796ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parentOfCameras: {fileID: 0}
 --- !u!114 &3227875973172334030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7139,10 +7269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debugUI: {fileID: 0}
-  _spawnPositions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  _infoUI: {fileID: 0}
 --- !u!114 &7473134802063456951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7234,7 +7361,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1322089861111074623
+--- !u!114 &6121611445855271725
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7243,7 +7370,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7229190191780136019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34657d72110e2fc43b3ee2750c35c12c, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d038545f8a2c8a48a690995df38a853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7318219783416578071
@@ -12744,7 +12871,7 @@ Transform:
   m_GameObject: {fileID: 8771141000080418179}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.585, y: 0.89, z: -2.514}
+  m_LocalPosition: {x: -0.59, y: 0.89, z: -2.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12759,11 +12886,11 @@ TrailRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8771141000080418179}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
-  m_MotionVectors: 0
+  m_MotionVectors: 2
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
@@ -12792,7 +12919,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 3
+  m_Time: 0.1
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -12936,7 +13063,7 @@ GameObject:
   - component: {fileID: 4549610980318178525}
   - component: {fileID: 5191943208133264017}
   m_Layer: 0
-  m_Name: NitroSound
+  m_Name: SFX_Nitro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

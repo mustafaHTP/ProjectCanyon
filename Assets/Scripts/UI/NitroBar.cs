@@ -6,12 +6,12 @@ public class NitroBar : MonoBehaviour
     [SerializeField] private GameObject car;
 
     private Image _nitroBar;
-    private NitroController _nitroController;
+    private CarNitroController _nitroController;
 
     private void Start()
     {
         _nitroBar = GetComponent<Image>();
-        _nitroController = car.GetComponent<NitroController>();
+        _nitroController = car.GetComponent<CarNitroController>();
     }
 
     private void Update()

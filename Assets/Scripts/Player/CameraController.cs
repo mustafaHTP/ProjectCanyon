@@ -5,21 +5,21 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private Transform _parentOfCameras;
-
     private const int HighPriorityCameraValue = 20;
     private const int LowPriorityCameraValue = 10;
 
     private int _activeCameraIndex = 0;
+    private Transform _parentOfCameras;
     private CinemachineVirtualCamera _activeCamera;
-    private List<CinemachineVirtualCamera> _cameras;
+    private CinemachineVirtualCamera [] _cameras;
+    private IInput _input;
 
     public void SwitchCamera()
     {
         int oldActiveCameraIndex = _activeCameraIndex;
         int newActiveCameraIndex = oldActiveCameraIndex + 1;
 
-        if (newActiveCameraIndex == _cameras.Count)
+        if (newActiveCameraIndex == _cameras.Length)
         {
             newActiveCameraIndex = 0;
         }
@@ -33,11 +33,25 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        _cameras = _parentOfCameras.GetComponentsInChildren<CinemachineVirtualCamera>().ToList();
+        _input = GetComponent<IInput>();
+        InitCameras();
+    }
 
+    private void InitCameras()
+    {
+        _parentOfCameras = FindAnyObjectByType<ParentOfCameras>().transform;
+        if(_parentOfCameras == null)
+        {
+            Debug.LogError("Parent of Cameras has not been found !");
+        }
+
+        _cameras = new CinemachineVirtualCamera[_parentOfCameras.childCount];
+        _cameras = _parentOfCameras.GetComponentsInChildren<CinemachineVirtualCamera>();
+
+        //Select active camera when initializing
         _activeCamera = _cameras[_activeCameraIndex];
 
-        for (int i = 0; i < _cameras.Count; i++)
+        for (int i = 0; i < _cameras.Length; i++)
         {
             if (i == _activeCameraIndex)
             {
@@ -52,7 +66,7 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (_input.Input.ChangeCameraInput)
         {
             SwitchCamera();
         }

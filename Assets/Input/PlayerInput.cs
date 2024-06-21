@@ -13,6 +13,8 @@ public class PlayerInput : MonoBehaviour, IInput
     private InputAction _steerAction;
     private InputAction _shiftUpAction;
     private InputAction _shiftDownAction;
+    private InputAction _changeCameraAction;
+    private InputAction _toggleHeadlightAction;
 
     private void Awake()
     {
@@ -25,6 +27,8 @@ public class PlayerInput : MonoBehaviour, IInput
         _steerAction = _inputActions.Player.Steer;
         _shiftUpAction = _inputActions.Player.ShiftUp;
         _shiftDownAction = _inputActions.Player.ShiftDown;
+        _changeCameraAction = _inputActions.Player.ChangeCamera;
+        _toggleHeadlightAction = _inputActions.Player.ToggleHeadlight;
     }
 
     private void OnEnable()
@@ -46,13 +50,15 @@ public class PlayerInput : MonoBehaviour, IInput
     {
         return new FrameInput
         {
-            GasInput = _gasAction.IsPressed(),
-            BrakeInput = _brakeAction.IsPressed(),
+            GasInput = _gasAction.ReadValue<float>(),
+            BrakeInput = _brakeAction.ReadValue<float>(),
             NitroInput = _nitroAction.IsPressed(),
-            HandbrakeInput = _handbrakeAction.IsPressed(),
+            HandbrakeInput = _handbrakeAction.ReadValue<float>(),
             SteerInput = _steerAction.ReadValue<float>(),
             ShiftUpInput = _shiftUpAction.WasPressedThisFrame(),
-            ShiftDownInput = _shiftDownAction.WasPressedThisFrame()
+            ShiftDownInput = _shiftDownAction.WasPressedThisFrame(),
+            ChangeCameraInput = _changeCameraAction.WasPressedThisFrame(),
+            ToggleHeadligthInput = _toggleHeadlightAction.WasPressedThisFrame()
         };
     }
 }

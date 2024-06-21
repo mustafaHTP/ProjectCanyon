@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5418919924166517514}
   - component: {fileID: 5907452555185202269}
   - component: {fileID: 8119263290399304101}
-  - component: {fileID: 5196425834040118201}
+  - component: {fileID: 5657025240500990479}
   m_Layer: 0
   m_Name: ActionCamera
   m_TagString: Untagged
@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446348182089246408}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.04459826, y: 0.79121965, z: -0.05812122, w: 0.6071281}
-  m_LocalPosition: {x: 335.94696, y: 21.01, z: 330.33817}
+  m_LocalRotation: {x: 0.069030784, y: 0.8060956, z: -0.0959639, w: 0.57985824}
+  m_LocalPosition: {x: 356.0652, y: 19.883812, z: 327.00415}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -86,14 +86,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9eb6408d2f8344ebe30d56dca1173f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carController: {fileID: 0}
   _applyThrottleBehavior: 1
   _throttleDamping: {x: 0.3, y: 0.3, z: 0.3}
   _throttleDampingSpeed: 0.1
   _applyDriftBehavior: 1
-  _driftFollowOffset: {x: 0, y: 1, z: -5}
-  _trackedOffsetChangeSpeed: 5
-  _steerXDamping: 5
+  _trackedObjectOffsetChangeSpeed: 4
+  _trackedObjectOffsetXDamping: 3.5
   _applyNitroBehavior: 1
   _nitroFOV: 120
   _defaultFOV: 60
@@ -101,23 +99,23 @@ MonoBehaviour:
   _applyNoiseBehavior: 1
   _minFrequencyGain: 0
   _maxFrequencyGain: 0.4
---- !u!114 &5196425834040118201
+--- !u!114 &5657025240500990479
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446348182089246408}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 0
+  m_FocusTracking: 1
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
-  m_Profile: {fileID: 11400000, guid: acbc2d70a846e414785679a5f3aab740, type: 2}
+  m_Profile: {fileID: 11400000, guid: 69dfb1e7125ac654588c6ce37610881b, type: 2}
 --- !u!1 &1321822120346000453
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5765354634107136479}
   - component: {fileID: 2185132395887236567}
-  - component: {fileID: 8174874999671289823}
+  - component: {fileID: 5021310268798015317}
   m_Layer: 0
   m_Name: ChaseCamera
   m_TagString: Untagged
@@ -352,8 +350,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3516915770259646348}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0844364, y: 0.7856823, z: -0.11003864, w: 0.60288084}
-  m_LocalPosition: {x: 333.9185, y: 21, z: 330.88165}
+  m_LocalRotation: {x: 0.10702215, y: 0.7980379, z: -0.148778, w: 0.57406175}
+  m_LocalPosition: {x: 354.08145, y: 20.063282, z: 327.66953}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -399,14 +397,14 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 6330098822130568316}
---- !u!114 &8174874999671289823
+--- !u!114 &5021310268798015317
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3516915770259646348}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
   m_Name: 
@@ -415,7 +413,7 @@ MonoBehaviour:
   m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
-  m_Profile: {fileID: 11400000, guid: acbc2d70a846e414785679a5f3aab740, type: 2}
+  m_Profile: {fileID: 0}
 --- !u!1 &5285965556718379311
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,6 +519,7 @@ GameObject:
   m_Component:
   - component: {fileID: 177840641934487104}
   - component: {fileID: 6749279492580597055}
+  - component: {fileID: 1401574561420211998}
   m_Layer: 0
   m_Name: UpperChaseCamera
   m_TagString: Untagged
@@ -536,8 +535,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5806719128172569959}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.119113915, y: 0.8258882, z: -0.19018747, w: 0.5172517}
-  m_LocalPosition: {x: 333.67538, y: 22.75, z: 332.29266}
+  m_LocalRotation: {x: 0.14202873, y: 0.8329896, z: -0.22669862, w: 0.48431808}
+  m_LocalPosition: {x: 354.07797, y: 21.860271, z: 329.04187}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -583,6 +582,23 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 7497466413687898209}
+--- !u!114 &1401574561420211998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5806719128172569959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FocusTracksTarget: 0
+  m_FocusTracking: 0
+  m_FocusTarget: {fileID: 0}
+  m_FocusOffset: 0
+  m_Profile: {fileID: 0}
 --- !u!1 &5824262138886855468
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,6 +608,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5381159970331862966}
+  - component: {fileID: 2199575376008121282}
   m_Layer: 0
   m_Name: Cameras
   m_TagString: Untagged
@@ -619,6 +636,18 @@ Transform:
   - {fileID: 5765354634107136479}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2199575376008121282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5824262138886855468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3971baca66ee57444afaf1ddd35f14e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6686561392743012335
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,6 +739,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1603178414019833317}
   - component: {fileID: 6644329678846947989}
+  - component: {fileID: 4384610906818574029}
   m_Layer: 0
   m_Name: TopDownCamera
   m_TagString: Untagged
@@ -725,8 +755,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6805138036635232593}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.17991093, y: 0.6998309, z: -0.18938161, w: 0.66483337}
-  m_LocalPosition: {x: 319.0299, y: 31.66, z: 330.18115}
+  m_LocalRotation: {x: 0.17397152, y: 0.72004527, z: -0.19485182, w: 0.6428853}
+  m_LocalPosition: {x: 338.97992, y: 30.099998, z: 327.95673}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -772,6 +802,23 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1364205204583623925}
+--- !u!114 &4384610906818574029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6805138036635232593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FocusTracksTarget: 0
+  m_FocusTracking: 0
+  m_FocusTarget: {fileID: 0}
+  m_FocusOffset: 0
+  m_Profile: {fileID: 0}
 --- !u!1 &7310713007337699086
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,6 +829,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1438869164249046363}
   - component: {fileID: 7354781063455927587}
+  - component: {fileID: 6569526740098469411}
   m_Layer: 0
   m_Name: HoodCamera
   m_TagString: Untagged
@@ -797,8 +845,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7310713007337699086}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7933512, z: -0, w: 0.60876423}
-  m_LocalPosition: {x: 340.68, y: 20.64, z: 329.06998}
+  m_LocalRotation: {x: 0.026364634, y: 0.81096023, z: -0.036651094, w: 0.58335686}
+  m_LocalPosition: {x: 360.66025, y: 19.073315, z: 325.46292}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -844,6 +892,23 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 776456696882763086}
+--- !u!114 &6569526740098469411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310713007337699086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FocusTracksTarget: 0
+  m_FocusTracking: 0
+  m_FocusTarget: {fileID: 0}
+  m_FocusOffset: 0
+  m_Profile: {fileID: 0}
 --- !u!1 &8162245232715799833
 GameObject:
   m_ObjectHideFlags: 0
