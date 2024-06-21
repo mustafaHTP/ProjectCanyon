@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,5 +5,5 @@ using UnityEngine;
 /// </summary>
 public class Player : MonoBehaviour
 {
-    
+
 }

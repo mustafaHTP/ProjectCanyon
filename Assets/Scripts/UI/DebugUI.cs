@@ -28,13 +28,13 @@ public class DebugUI : MonoBehaviour
     private void Awake()
     {
         Player player = FindAnyObjectByType<Player>();
-        if(player == null)
+        if (player == null)
         {
             Debug.LogError("Player has not been found !");
         }
         else
         {
-            if(!player.TryGetComponent(out _carController))
+            if (!player.TryGetComponent(out _carController))
             {
                 Debug.LogError("Player does not have Car Controller !");
             }
@@ -61,7 +61,7 @@ public class DebugUI : MonoBehaviour
         _handbrakeIndicatorImage.fillAmount = _input.Input.HandbrakeInput;
 
         float steerInput = _input.Input.SteerInput;
-        if(steerInput > 0f)
+        if (steerInput > 0f)
         {
             _steerRightIndicatorImage.fillAmount = steerInput;
         }

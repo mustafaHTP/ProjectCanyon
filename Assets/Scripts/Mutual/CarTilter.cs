@@ -38,8 +38,8 @@ public class CarTilter : MonoBehaviour
         foreach (Transform item in _objectsToBeTilted)
         {
             Quaternion targetRotation = Quaternion.Euler(
-                item.localEulerAngles.x, 
-                item.localEulerAngles.y, 
+                item.localEulerAngles.x,
+                item.localEulerAngles.y,
                 tiltAmount);
             Quaternion currentRotation = item.localRotation;
             item.transform.localRotation = Quaternion.Slerp(

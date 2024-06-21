@@ -53,7 +53,7 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
         }
         else
         {
-            if(!player.TryGetComponent(out _carController))
+            if (!player.TryGetComponent(out _carController))
             {
                 Debug.LogError("Player does not have Car Controller !");
             }
@@ -67,7 +67,7 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
 
     private void ApplyDriftBehavior()
     {
-        if(!_applyDriftBehavior) return;
+        if (!_applyDriftBehavior) return;
 
         float driftDirection = Vector3.Dot(_carRigidbody.velocity.normalized, _carRigidbody.transform.right.normalized);
         float currentTrackedOffsetX = _actionCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x;

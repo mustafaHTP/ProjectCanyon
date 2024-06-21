@@ -1,6 +1,4 @@
 using Cinemachine;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -11,7 +9,7 @@ public class CameraController : MonoBehaviour
     private int _activeCameraIndex = 0;
     private Transform _parentOfCameras;
     private CinemachineVirtualCamera _activeCamera;
-    private CinemachineVirtualCamera [] _cameras;
+    private CinemachineVirtualCamera[] _cameras;
     private IInput _input;
 
     public void SwitchCamera()
@@ -40,7 +38,7 @@ public class CameraController : MonoBehaviour
     private void InitCameras()
     {
         _parentOfCameras = FindAnyObjectByType<ParentOfCameras>().transform;
-        if(_parentOfCameras == null)
+        if (_parentOfCameras == null)
         {
             Debug.LogError("Parent of Cameras has not been found !");
         }

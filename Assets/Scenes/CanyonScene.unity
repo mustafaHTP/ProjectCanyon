@@ -4293,7 +4293,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.05
+  m_Intensity: 0.01
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -6314,7 +6314,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660183622}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14896953, y: 0.5418379, z: -0.098277956, w: 0.8213168}
+  m_LocalRotation: {x: 0.14896955, y: 0.5418379, z: -0.098277956, w: 0.82131684}
   m_LocalPosition: {x: 349.99957, y: 23.53, z: 318.80057}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9637,10 +9637,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1695887351363193958, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
-      propertyPath: m_Time
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 3562521110618980054, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: _infoUI
       value: 
@@ -9652,10 +9648,6 @@ PrefabInstance:
     - target: {fileID: 7229190191780136019, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_Name
       value: Car
-      objectReference: {fileID: 0}
-    - target: {fileID: 8144743236164917004, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
-      propertyPath: m_Time
-      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
