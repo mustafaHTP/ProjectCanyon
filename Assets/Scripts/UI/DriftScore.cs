@@ -3,18 +3,20 @@ using UnityEngine;
 
 public class DriftScore : MonoBehaviour
 {
-    [SerializeField] private GameObject car;
-    [SerializeField] private int driftScoreFactor;
+    [SerializeField] private int _driftScoreFactor;
 
+    private Transform _playerCar;
     private int _driftScore;
-    TextMeshProUGUI _driftScoreText;
+    private TextMeshProUGUI _driftScoreText;
     private Rigidbody _carRigidBody;
     private CarController _carController;
 
     private void Awake()
     {
-        _carRigidBody = car.GetComponent<Rigidbody>();
-        _carController = car.GetComponent<CarController>();
+        FindPlayerCar();
+
+        _carRigidBody = _playerCar.GetComponent<Rigidbody>();
+        _carController = _playerCar.GetComponent<CarController>();
         _driftScoreText = GetComponent<TextMeshProUGUI>();
         _driftScore = 0;
     }
@@ -35,8 +37,16 @@ public class DriftScore : MonoBehaviour
     private void IncreaseScore()
     {
         float driftDirection = Vector3.Dot(_carRigidBody.velocity.normalized, _carRigidBody.transform.right.normalized);
-        _driftScore += (int)(driftScoreFactor * Mathf.Abs(driftDirection) * Time.fixedDeltaTime);
+        _driftScore += (int)(_driftScoreFactor * Mathf.Abs(driftDirection) * Time.fixedDeltaTime);
         _driftScoreText.text = _driftScore.ToString();
     }
 
+    private void FindPlayerCar()
+    {
+        _playerCar = FindAnyObjectByType<Player>().transform;
+        if (_playerCar == null)
+        {
+            Debug.LogError("Player car has not been found !");
+        }
+    }
 }

@@ -1,31 +1,35 @@
+using System;
 using UnityEngine;
 
 public class Speedometer : MonoBehaviour
 {
     [Header("Speedometer Needle")]
-    [SerializeField] private RectTransform needle;
+    [SerializeField] private RectTransform _needleRT;
 
     [Header("Needle Angles")]
-    [SerializeField] private float minSpeedNeedleAngle;
-    [SerializeField] private float maxSpeedNeedleAngle;
-
-    [Header("Car")]
-    [SerializeField] private GameObject car;
+    [SerializeField] private float _minSpeedNeedleAngle;
+    [SerializeField] private float _maxSpeedNeedleAngle;
 
     [Header("Rotation Amount Based On Speed")]
-    [SerializeField] private float maxRotationX;
-    [SerializeField] private RectTransform nitroBar;
+    [SerializeField] private float _maxRotationX;
+    [SerializeField] private RectTransform _nitroBarRT;
 
     private float _initalRotationX;
     private float _topSpeed;
     private Rigidbody _carRigidBody;
+    private Transform _playerCar;
     private CarController _carController;
+
+    private void Awake()
+    {
+        FindPlayerCar();
+    }
 
     private void Start()
     {
-        _carController = car.GetComponent<CarController>();
+        _carController = _playerCar.GetComponent<CarController>();
         _topSpeed = _carController.TopSpeed;
-        _carRigidBody = car.GetComponent<Rigidbody>();
+        _carRigidBody = _playerCar.GetComponent<Rigidbody>();
         _initalRotationX = transform.localRotation.eulerAngles.x;
     }
 
@@ -35,12 +39,21 @@ public class Speedometer : MonoBehaviour
         RotateNeedle();
     }
 
+    private void FindPlayerCar()
+    {
+        _playerCar = FindAnyObjectByType<Player>().transform;
+        if (_playerCar == null)
+        {
+            Debug.LogError("Player car has not been found !");
+        }
+    }
+
     private void RotateSpeedometerAndNitroBar()
     {
         float mappedVelocity = Mathf.InverseLerp(0f, _topSpeed, _carRigidBody.velocity.magnitude);
-        float targetRotation = Mathf.Lerp(_initalRotationX, maxRotationX, mappedVelocity);
+        float targetRotation = Mathf.Lerp(_initalRotationX, _maxRotationX, mappedVelocity);
         transform.localRotation = Quaternion.Euler(targetRotation, 0f, 0f);
-        nitroBar.localRotation = Quaternion.Euler(targetRotation, 0f, 0f);
+        _nitroBarRT.localRotation = Quaternion.Euler(targetRotation, 0f, 0f);
     }
 
     private void RotateNeedle()
@@ -50,7 +63,7 @@ public class Speedometer : MonoBehaviour
         float normalizedSpeed = currentSpeed / topSpeed;
         float roundedSpeed = Mathf.Round(normalizedSpeed * Mathf.Pow(10, 3)) / Mathf.Pow(10, 3);
 
-        needle.localEulerAngles =
-            new Vector3(0, 0, Mathf.Lerp(minSpeedNeedleAngle, maxSpeedNeedleAngle, roundedSpeed));
+        _needleRT.localEulerAngles =
+            new Vector3(0, 0, Mathf.Lerp(_minSpeedNeedleAngle, _maxSpeedNeedleAngle, roundedSpeed));
     }
 }

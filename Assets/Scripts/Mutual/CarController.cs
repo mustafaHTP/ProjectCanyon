@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CarController : MonoBehaviour
@@ -8,7 +9,7 @@ public class CarController : MonoBehaviour
 
     [Header("Experimental")]
     [Space(5)]
-    [SerializeField] private bool _isUsingManualWheelConfig = false;
+    [SerializeField] private bool _useDownforce;
     [SerializeField] private float _downforce;
 
     [Header("Wheel Colliders")]
@@ -129,8 +130,9 @@ public class CarController : MonoBehaviour
 
         SyncWheelMeshesWithColliders();
 
-        _carRigidBody.AddForce(transform.up * _downforce * -1f);
         _currentSpeed = _carRigidBody.velocity.magnitude;
+
+        if(_useDownforce) _carRigidBody.AddForce(_downforce * -1f * transform.up);
     }
 
     private void HelpSteer()
@@ -204,8 +206,6 @@ public class CarController : MonoBehaviour
 
     private void Handbrake()
     {
-        if (_isUsingManualWheelConfig) return;
-
         bool isUsingHandbrake = _input.Input.HandbrakeInput != 0f;
 
         // Update handbrake state and play SFX if necessary

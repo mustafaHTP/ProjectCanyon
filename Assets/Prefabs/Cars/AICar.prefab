@@ -140,10 +140,18 @@ PrefabInstance:
       propertyPath: m_BoundingSphereOverride.z
       value: 6e-45
       objectReference: {fileID: 0}
+    - target: {fileID: 6259610614737806554, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: tailLightTrailEffects.Array.data[1]
+      value: 
+      objectReference: {fileID: 1962998438703553625}
     - target: {fileID: 6432997406434366320, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6466593399388102097, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: skidMarkEffects.Array.data[1]
+      value: 
+      objectReference: {fileID: 8652817626967599806}
     - target: {fileID: 7229190191780136019, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_Name
       value: AICar
@@ -164,6 +172,16 @@ PrefabInstance:
       insertIndex: 1
       addedObject: {fileID: 1330611700399428295}
   m_SourcePrefab: {fileID: 100100000, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+--- !u!96 &1962998438703553625 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 527705957478481105, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+  m_PrefabInstance: {fileID: 2048910679377633416}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &8652817626967599806 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 7240603622078843446, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+  m_PrefabInstance: {fileID: 2048910679377633416}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8663816573087507675 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7229190191780136019, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}

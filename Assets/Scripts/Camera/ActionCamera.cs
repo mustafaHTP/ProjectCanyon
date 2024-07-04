@@ -14,7 +14,8 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
     [Space(2)]
     [SerializeField] private bool _applyDriftBehavior;
     [SerializeField] private float _trackedObjectOffsetChangeSpeed;
-    [SerializeField] private float _trackedObjectOffsetXDamping = 1f;
+    [SerializeField] private float _trackedObjectOffsetX;
+    [SerializeField] private float _defaultTrackedObjectOffsetX = 0f;
 
     [Header("Nitro Behavior Config")]
     [Space(2)]
@@ -69,21 +70,25 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
     {
         if (!_applyDriftBehavior) return;
 
-        float driftDirection = Vector3.Dot(_carRigidbody.velocity.normalized, _carRigidbody.transform.right.normalized);
-        float currentTrackedOffsetX = _actionCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x;
-        float targetTrackedOffsetX = -1f * driftDirection * _trackedObjectOffsetXDamping;
+        float driftDirection = GetDriftDirection();
+        float currentTrackedOffsetX = 
+            _actionCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x;
+        float newTargetTrackedObjectOffsetX = -1f * driftDirection * _trackedObjectOffsetX;
         float deltaOffsetX = Time.deltaTime * _trackedObjectOffsetChangeSpeed;
 
+        float lerpedTrackedObjectOffsetX;
         if (_carController.IsDrifting)
         {
-            float newTrackedOffsetX = Mathf.Lerp(currentTrackedOffsetX, targetTrackedOffsetX, deltaOffsetX);
-            _actionCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x = newTrackedOffsetX;
+            lerpedTrackedObjectOffsetX = 
+                Mathf.Lerp(currentTrackedOffsetX, newTargetTrackedObjectOffsetX, deltaOffsetX);
         }
         else
         {
-            float newTrackedOffsetX = Mathf.Lerp(currentTrackedOffsetX, 0, deltaOffsetX);
-            _actionCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x = newTrackedOffsetX;
+            lerpedTrackedObjectOffsetX = 
+                Mathf.Lerp(currentTrackedOffsetX, _defaultTrackedObjectOffsetX, deltaOffsetX);
         }
+
+        _actionCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x = lerpedTrackedObjectOffsetX;
     }
 
     private void ApplyNitroBehavior()
@@ -144,5 +149,10 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
             Mathf.Lerp(0f, _throttleDamping.y, _deltaDamping);
         _actionCamera.GetCinemachineComponent<CinemachineTransposer>().m_ZDamping =
             Mathf.Lerp(0f, _throttleDamping.z, _deltaDamping);
+    }
+
+    private float GetDriftDirection()
+    {
+        return Vector3.Dot(_carRigidbody.velocity.normalized, _carRigidbody.transform.right.normalized);
     }
 }

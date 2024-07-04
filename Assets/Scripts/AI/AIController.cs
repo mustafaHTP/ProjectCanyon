@@ -72,6 +72,11 @@ public class AIController : MonoBehaviour, IInput
         Gizmos.DrawLineStrip(waypointPositions.ToArray().AsSpan(), false);
     }
 
+    private void Awake()
+    {
+        InitPath();
+    }
+
     private void Update()
     {
         if (!_canMove) return;
@@ -80,6 +85,15 @@ public class AIController : MonoBehaviour, IInput
         FollowPath();
 
         UpdateDefaultInputs();
+    }
+
+    private void InitPath()
+    {
+        _path = FindAnyObjectByType<Path>().transform;
+        if (_path == null)
+        {
+            Debug.LogError("Path has not been found");
+        }
     }
 
     private void AvoidObstacle()

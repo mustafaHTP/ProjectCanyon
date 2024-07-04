@@ -3,11 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class DebugActionController : MonoBehaviour
 {
+    [Header("Debug UI")]
+    [SerializeField] private bool _isDebugUIOnAtAwake;
     [SerializeField] private GameObject _debugUI;
+
+    [Header("Info UI")]
+    [SerializeField] private bool _isInfoUIOnAtAwake;
     [SerializeField] private GameObject _infoUI;
 
-    private bool _isDebugUIOn = false;
-    private bool _isInfoUIOn = true;
+    private bool _isDebugUIOn;
+    private bool _isInfoUIOn;
 
     private void Awake()
     {
@@ -16,8 +21,11 @@ public class DebugActionController : MonoBehaviour
 
     private void InitUI()
     {
+        _isDebugUIOn = _isDebugUIOnAtAwake;
+        _isInfoUIOn = _isInfoUIOnAtAwake;
+
         _debugUI.SetActive(_isDebugUIOn);
-        _infoUI.SetActive(_isInfoUIOn);
+        _infoUI.SetActive(_isInfoUIOnAtAwake);
     }
 
     private void Update()

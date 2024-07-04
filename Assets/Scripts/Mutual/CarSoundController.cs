@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CarSoundController : MonoBehaviour
@@ -16,16 +17,28 @@ public class CarSoundController : MonoBehaviour
     [Header("Handbrake SFX")]
     [SerializeField] private AudioSource _handbrakeSFX;
 
+    [Header("Handbrake SFX")]
+    [SerializeField] private AudioSource _turboSFX;
+    [SerializeField] private float _turboVolumeIncrease;
+    [SerializeField] private float _turboVolumeDecrease;
+    [SerializeField]
+    [Range(0f, 1f)] private float _maxTurboVolume;
+    [SerializeField]
+    [Range(0f, 1f)] private float _minTurboVolume;
+
     private CarController _carController;
+    private IInput _input;
 
     private void Awake()
     {
         _carController = GetComponent<CarController>();
+        _input = GetComponent<IInput>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         PlayEngineSFX();
+        PlayTurboSFX();
     }
 
     public void PlayEngineSFX()
@@ -86,6 +99,17 @@ public class CarSoundController : MonoBehaviour
         if (!_handbrakeSFX.isPlaying)
         {
             _handbrakeSFX.Play();
+        }
+    }
+
+    public void PlayTurboSFX()
+    {
+        float normalizedVelocity = _carController.CurrentSpeed / _carController.TopSpeed;
+        _turboSFX.volume = Mathf.Lerp(_minTurboVolume, _maxTurboVolume, normalizedVelocity);
+
+        if (!_turboSFX.isPlaying)
+        {
+            _turboSFX.Play();
         }
     }
 }

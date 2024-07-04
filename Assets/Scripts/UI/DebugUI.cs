@@ -97,13 +97,15 @@ public class DebugUI : MonoBehaviour
 
     private void DisplaySidewaysFrictionValues()
     {
-        _sidewaysFrictionValuesText.text = $"Front Wheel Values{Environment.NewLine}";
+        _sidewaysFrictionValuesText.text = $"FRONT WHEEL{Environment.NewLine}{Environment.NewLine}";
+        _sidewaysFrictionValuesText.text += $"RPM: {_frontWheelCollider.rpm}{Environment.NewLine}";
         _sidewaysFrictionValuesText.text += $"ExtremumSlip: {_frontWheelCollider.sidewaysFriction.extremumSlip}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}ExtremumValue: {_frontWheelCollider.sidewaysFriction.extremumValue}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}AsymptoteSlip: {_frontWheelCollider.sidewaysFriction.asymptoteSlip}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}AsymptoteValue: {_frontWheelCollider.sidewaysFriction.asymptoteValue}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}Stiffness: {_frontWheelCollider.sidewaysFriction.stiffness}";
-        _sidewaysFrictionValuesText.text += $"{Environment.NewLine}Back Wheel Values{Environment.NewLine}";
+        _sidewaysFrictionValuesText.text += $"{Environment.NewLine}BACK WHEEL{Environment.NewLine}{Environment.NewLine}";
+        _sidewaysFrictionValuesText.text += $"{Environment.NewLine}RPM: {_backWheelCollider.rpm}{Environment.NewLine}";
         _sidewaysFrictionValuesText.text += $"ExtremumSlip: {_backWheelCollider.sidewaysFriction.extremumSlip}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}ExtremumValue: {_backWheelCollider.sidewaysFriction.extremumValue}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}AsymptoteSlip: {_backWheelCollider.sidewaysFriction.asymptoteSlip}";
