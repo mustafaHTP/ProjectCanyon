@@ -99,7 +99,7 @@ MonoBehaviour:
   _FOVChangeSpeed: 5
   _applyNoiseBehavior: 1
   _minFrequencyGain: 0
-  _maxFrequencyGain: 0.4
+  _maxFrequencyGain: 0.3
 --- !u!114 &5657025240500990479
 MonoBehaviour:
   m_ObjectHideFlags: 0
