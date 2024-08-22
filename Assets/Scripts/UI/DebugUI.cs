@@ -56,11 +56,11 @@ public class DebugUI : MonoBehaviour
 
     private void DisplayInputFeedback()
     {
-        _gasIndicatorImage.fillAmount = _input.Input.GasInput;
-        _brakeIndicatorImage.fillAmount = _input.Input.BrakeInput;
-        _handbrakeIndicatorImage.fillAmount = _input.Input.HandbrakeInput;
+        _gasIndicatorImage.fillAmount = _input.FrameInput.GasInput;
+        _brakeIndicatorImage.fillAmount = _input.FrameInput.BrakeInput;
+        _handbrakeIndicatorImage.fillAmount = _input.FrameInput.HandbrakeInput;
 
-        float steerInput = _input.Input.SteerInput;
+        float steerInput = _input.FrameInput.SteerInput;
         if (steerInput > 0f)
         {
             _steerRightIndicatorImage.fillAmount = steerInput;

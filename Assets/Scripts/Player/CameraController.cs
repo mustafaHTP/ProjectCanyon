@@ -64,7 +64,7 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if (_input.Input.ChangeCameraInput)
+        if (_input.FrameInput.ChangeCameraInput)
         {
             SwitchCamera();
         }

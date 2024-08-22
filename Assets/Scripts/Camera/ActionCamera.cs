@@ -100,14 +100,14 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
             _actionCamera.m_Lens.FieldOfView = Mathf.Lerp(
                 _actionCamera.m_Lens.FieldOfView,
                 _nitroFOV,
-                _FOVChangeSpeed * Time.fixedDeltaTime);
+                _FOVChangeSpeed * Time.deltaTime);
         }
         else
         {
             _actionCamera.m_Lens.FieldOfView = Mathf.Lerp(
                 _actionCamera.m_Lens.FieldOfView,
                 _defaultFOV,
-                _FOVChangeSpeed * Time.fixedDeltaTime);
+                _FOVChangeSpeed * Time.deltaTime);
         }
     }
 
@@ -132,7 +132,7 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
     {
         if (!_applyThrottleBehavior) return;
 
-        if (_input.Input.GasInput > 0f)
+        if (_input.FrameInput.GasInput > 0f)
         {
             _deltaDamping += Time.deltaTime * _throttleDampingSpeed;
         }

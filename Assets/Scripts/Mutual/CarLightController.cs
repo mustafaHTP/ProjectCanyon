@@ -34,7 +34,7 @@ public class CarLightController : MonoBehaviour
 
     private void Update()
     {
-        if (_input.Input.ToggleHeadligthInput)
+        if (_input.FrameInput.ToggleHeadligthInput)
         {
             ToggleHeadlight();
         }

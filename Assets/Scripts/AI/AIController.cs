@@ -46,7 +46,7 @@ public class AIController : MonoBehaviour, IInput
     private bool _isAvoidingObstacle = false;
     private int _currentWaypointIndex = 0;
 
-    public FrameInput Input { get; set; } = new FrameInput();
+    public FrameInput FrameInput { get; set; } = new FrameInput();
 
     private void OnDrawGizmos()
     {
@@ -212,7 +212,7 @@ public class AIController : MonoBehaviour, IInput
         }
 
         //Update Input
-        Input.SteerInput = newSteerInput;
+        FrameInput.SteerInput = newSteerInput;
 
         Gas();
     }
@@ -248,7 +248,7 @@ public class AIController : MonoBehaviour, IInput
         float steerResult = Vector3.Dot(transform.right, directionToTargetWaypoint.normalized);
 
         //Update Input
-        Input.SteerInput = steerResult;
+        FrameInput.SteerInput = steerResult;
     }
 
     private bool ShouldBrake()
@@ -275,14 +275,14 @@ public class AIController : MonoBehaviour, IInput
 
     private void Gas()
     {
-        Input.GasInput = MaxGasInput;
-        Input.BrakeInput = MinBrakeInput;
+        FrameInput.GasInput = MaxGasInput;
+        FrameInput.BrakeInput = MinBrakeInput;
     }
 
     private void Brake()
     {
-        Input.GasInput = MinGasInput;
-        Input.BrakeInput = MaxBrakeInput;
+        FrameInput.GasInput = MinGasInput;
+        FrameInput.BrakeInput = MaxBrakeInput;
     }
 
     private bool HasArrivedWaypoint()
@@ -313,9 +313,9 @@ public class AIController : MonoBehaviour, IInput
 
     private void UpdateDefaultInputs()
     {
-        Input.HandbrakeInput = MinHandbrakeInput;
-        Input.NitroInput = false;
-        Input.ShiftDownInput = false;
-        Input.ShiftUpInput = false;
+        FrameInput.HandbrakeInput = MinHandbrakeInput;
+        FrameInput.NitroInput = false;
+        FrameInput.ShiftDownInput = false;
+        FrameInput.ShiftUpInput = false;
     }
 }

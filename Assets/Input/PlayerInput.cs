@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour, IInput
 {
-    public FrameInput Input { get; set; } = new FrameInput();
+    public FrameInput FrameInput { get; set; } = new FrameInput();
 
     private PlayerInputActions _inputActions;
     private InputAction _gasAction;
@@ -43,7 +43,7 @@ public class PlayerInput : MonoBehaviour, IInput
 
     private void Update()
     {
-        Input = GetInput();
+        FrameInput = GetInput();
     }
 
     private FrameInput GetInput()

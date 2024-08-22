@@ -144,7 +144,7 @@ public class CarController : MonoBehaviour
 
     private void Steer()
     {
-        float targetSteerAngle = _maxSteerAngle * _input.Input.SteerInput;
+        float targetSteerAngle = _maxSteerAngle * _input.FrameInput.SteerInput;
 
         FrontLeftWheelCollider.steerAngle =
             Mathf.Lerp(FrontLeftWheelCollider.steerAngle, targetSteerAngle, _steerSensitivity);
@@ -162,7 +162,7 @@ public class CarController : MonoBehaviour
             return;
         }
 
-        bool isBraking = _input.Input.BrakeInput switch
+        bool isBraking = _input.FrameInput.BrakeInput switch
         {
             0f => false,
             _ => true
@@ -177,7 +177,7 @@ public class CarController : MonoBehaviour
             _lightController.TurnOffBackLights();
         }
 
-        float torqueToBeApplied = _brakeTorque * _input.Input.BrakeInput;
+        float torqueToBeApplied = _brakeTorque * _input.FrameInput.BrakeInput;
         ApplyBrakeTorque(torqueToBeApplied);
     }
 
@@ -194,11 +194,11 @@ public class CarController : MonoBehaviour
         // To move backwards
         if (_isApplyingReverseTorque)
         {
-            torqueToBeApplied = -1f * _engineTorque * _input.Input.BrakeInput;
+            torqueToBeApplied = -1f * _engineTorque * _input.FrameInput.BrakeInput;
         }
         else
         {
-            torqueToBeApplied = _engineTorque * _input.Input.GasInput;
+            torqueToBeApplied = _engineTorque * _input.FrameInput.GasInput;
         }
 
         ApplyMotorTorque(torqueToBeApplied);
@@ -206,7 +206,7 @@ public class CarController : MonoBehaviour
 
     private void Handbrake()
     {
-        bool isUsingHandbrake = _input.Input.HandbrakeInput != 0f;
+        bool isUsingHandbrake = _input.FrameInput.HandbrakeInput != 0f;
 
         // Update handbrake state and play SFX if necessary
         if (isUsingHandbrake)
@@ -362,13 +362,13 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void DecideCarMovementDirection()
     {
-        bool isBraking = _input.Input.BrakeInput switch
+        bool isBraking = _input.FrameInput.BrakeInput switch
         {
             0f => false,
             _ => true
         };
 
-        bool isGassing = _input.Input.GasInput switch
+        bool isGassing = _input.FrameInput.GasInput switch
         {
             0f => false,
             _ => true

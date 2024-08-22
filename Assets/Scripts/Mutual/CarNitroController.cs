@@ -58,7 +58,7 @@ public class CarNitroController : MonoBehaviour
 
     private void ProcessInput()
     {
-        bool isGassing = _input.Input.GasInput switch
+        bool isGassing = _input.FrameInput.GasInput switch
         {
             0f => false,
             _ => true
@@ -66,7 +66,7 @@ public class CarNitroController : MonoBehaviour
 
         if (isGassing)
         {
-            if (_input.Input.NitroInput)
+            if (_input.FrameInput.NitroInput)
             {
                 _isUsingNitro = true;
             }

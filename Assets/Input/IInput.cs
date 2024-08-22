@@ -1,4 +1,4 @@
 public interface IInput
 {
-    FrameInput Input { get; set; }
+    FrameInput FrameInput { get; set; }
 }
