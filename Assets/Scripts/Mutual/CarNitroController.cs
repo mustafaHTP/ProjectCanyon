@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CarController))]
 public class CarNitroController : MonoBehaviour
 {
     [Header("Experimental")]

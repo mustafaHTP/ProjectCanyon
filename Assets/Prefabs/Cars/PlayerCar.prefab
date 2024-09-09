@@ -1500,8 +1500,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f72a640565b839c4e8046ab002d7edd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _useManualWheelConfig: 1
   _useDownforce: 0
   _downforce: 3000
+  _useSteerHelper: 0
+  _useVfxCarSmoke: 0
+  _useVfxCarSkidmark: 0
   _frontLeftWheelCollider: {fileID: 7657905970992002567}
   _frontRightWheelCollider: {fileID: 7707933181805981301}
   _backLeftWheelCollider: {fileID: 270898805263259575}

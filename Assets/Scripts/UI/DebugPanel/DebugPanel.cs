@@ -3,8 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DebugUI : MonoBehaviour
+public class DebugPanel : MonoBehaviour, IPanel
 {
+    [Header("Panel GameObject")]
+    [SerializeField] private GameObject _panel;
+
     [Header("Text Mesh Objects")]
     [SerializeField] private TextMeshProUGUI _speedText;
     [SerializeField] private TextMeshProUGUI _driftDirectionText;
@@ -24,6 +27,24 @@ public class DebugUI : MonoBehaviour
     private CarController _carController;
     private Rigidbody _carRigidbody;
     private IInput _input;
+
+    #region IPanel Impl.
+
+    public GameObject AttachedGameObject => _panel;
+
+    public bool IsPanelActive { get; set; }
+
+    public void TogglePanel()
+    {
+        IsPanelActive = !IsPanelActive;
+        gameObject.SetActive(IsPanelActive);
+    }
+
+    public void DisablePanel() => gameObject.SetActive(false);
+
+    public void EnablePanel() => gameObject.SetActive(true);
+
+    #endregion
 
     private void Awake()
     {
@@ -52,6 +73,7 @@ public class DebugUI : MonoBehaviour
         DisplayDriftDirection();
         DisplaySidewaysFrictionValues();
         DisplayInputFeedback();
+        DisplaySlipValues();
     }
 
     private void DisplayInputFeedback()
@@ -104,12 +126,27 @@ public class DebugUI : MonoBehaviour
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}AsymptoteSlip: {_frontWheelCollider.sidewaysFriction.asymptoteSlip}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}AsymptoteValue: {_frontWheelCollider.sidewaysFriction.asymptoteValue}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}Stiffness: {_frontWheelCollider.sidewaysFriction.stiffness}";
-        _sidewaysFrictionValuesText.text += $"{Environment.NewLine}BACK WHEEL{Environment.NewLine}{Environment.NewLine}";
+        _sidewaysFrictionValuesText.text += $"{Environment.NewLine}{Environment.NewLine}BACK WHEEL{Environment.NewLine}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}RPM: {_backWheelCollider.rpm}{Environment.NewLine}";
         _sidewaysFrictionValuesText.text += $"ExtremumSlip: {_backWheelCollider.sidewaysFriction.extremumSlip}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}ExtremumValue: {_backWheelCollider.sidewaysFriction.extremumValue}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}AsymptoteSlip: {_backWheelCollider.sidewaysFriction.asymptoteSlip}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}AsymptoteValue: {_backWheelCollider.sidewaysFriction.asymptoteValue}";
         _sidewaysFrictionValuesText.text += $"{Environment.NewLine}Stiffness: {_backWheelCollider.sidewaysFriction.stiffness}";
+    }
+
+    private void DisplaySlipValues()
+    {
+        WheelHit frontWheelHit;
+        if (_carController.FrontLeftWheelCollider.GetGroundHit(out frontWheelHit))
+        {
+            print($"FL==>Fwd Slip:{Mathf.Abs(frontWheelHit.forwardSlip):N2}, Side Slip:{Mathf.Abs(frontWheelHit.sidewaysSlip):N2}");
+        }
+
+        WheelHit backWheelHit;
+        if (_carController.BackLeftWheelCollider.GetGroundHit(out backWheelHit))
+        {
+            print($"BL==>Fwd Slip:{Mathf.Abs(backWheelHit.forwardSlip):N2} , Side Slip: {Mathf.Abs(backWheelHit.sidewaysSlip):N2}");
+        }
     }
 }

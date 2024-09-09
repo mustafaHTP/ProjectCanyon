@@ -7,10 +7,14 @@ public class CarController : MonoBehaviour
 {
     public const float MinSpeed = 0f;
 
-    [Header("Experimental")]
+    [Header("Debug")]
     [Space(5)]
+    [SerializeField] private bool _useManualWheelConfig;
     [SerializeField] private bool _useDownforce;
     [SerializeField] private float _downforce;
+    [SerializeField] private bool _useSteerHelper;
+    [SerializeField] private bool _useVfxCarSmoke;
+    [SerializeField] private bool _useVfxCarSkidmark;
 
     [Header("Wheel Colliders")]
     [SerializeField] private WheelCollider _frontLeftWheelCollider;
@@ -69,6 +73,8 @@ public class CarController : MonoBehaviour
 
     #region Handling
 
+    private const float DefaultFrontStiffness = 2.5f;
+
     private float _currentFrontStiffness;
 
     /*
@@ -99,6 +105,7 @@ public class CarController : MonoBehaviour
         AWD
     }
 
+    #region Properties
     public bool IsDrifting => _isDrifting;
     public float TopSpeed => _topSpeed;
     public float CurrentSpeed => _currentSpeed;
@@ -106,6 +113,7 @@ public class CarController : MonoBehaviour
     public WheelCollider FrontRightWheelCollider => _frontRightWheelCollider;
     public WheelCollider BackLeftWheelCollider => _backLeftWheelCollider;
     public WheelCollider BackRightWheelCollider => _backRightWheelCollider;
+    #endregion
 
     private void Awake()
     {
@@ -130,13 +138,20 @@ public class CarController : MonoBehaviour
 
         SyncWheelMeshesWithColliders();
 
-        _currentSpeed = _carRigidBody.velocity.magnitude;
 
-        if(_useDownforce) _carRigidBody.AddForce(_downforce * -1f * transform.up);
+        _currentSpeed = _carRigidBody.velocity.magnitude;
+        if (_useDownforce) _carRigidBody.AddForce(_downforce * -1f * transform.up);
     }
 
     private void HelpSteer()
     {
+        if (!_useSteerHelper)
+        {
+            _currentFrontStiffness = DefaultFrontStiffness;
+
+            return;
+        }
+
         float currentSpeed = _carRigidBody.velocity.magnitude;
         float steerValue = currentSpeed / _topSpeed;
         _currentFrontStiffness = frontWheelsStiffnessCurve.Evaluate(steerValue);
@@ -258,8 +273,8 @@ public class CarController : MonoBehaviour
             _isDrifting = true;
             Drift();
 
-            _skidMarkController.TurnOnEffect();
-            _carSmokeController.TurnOnEffect();
+            if (_useVfxCarSkidmark) _skidMarkController.TurnOnEffect();
+            if (_useVfxCarSmoke) _carSmokeController.TurnOnEffect();
         }
         else
         {
@@ -413,6 +428,8 @@ public class CarController : MonoBehaviour
 
     private void Drift()
     {
+        if (_useManualWheelConfig) return;
+
         List<WheelCollider> wheelColliders = GetWheelCollidersAsList();
 
         //Both front and rear wheels have same value for drift
@@ -453,6 +470,8 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void Grip()
     {
+        if (_useManualWheelConfig) return;
+
         List<WheelCollider> wheelColliders = GetWheelCollidersAsList();
         for (int i = 0; i < wheelColliders.Count; i++)
         {
