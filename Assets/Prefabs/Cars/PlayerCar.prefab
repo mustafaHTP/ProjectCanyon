@@ -875,7 +875,7 @@ GameObject:
   - component: {fileID: 8737504349712817273}
   - component: {fileID: 7657905970992002567}
   m_Layer: 0
-  m_Name: FrontLeftWheelCollider
+  m_Name: FL_WC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1156,7 +1156,7 @@ GameObject:
   - component: {fileID: 5411112952502318070}
   - component: {fileID: 5424818279817026606}
   m_Layer: 0
-  m_Name: BackRightWheelCollider
+  m_Name: RR_WC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1500,16 +1500,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f72a640565b839c4e8046ab002d7edd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useManualWheelConfig: 1
-  _useDownforce: 0
+  _handbrakeTorque: 0
+  _useManualWheelConfig: 0
+  _useDownforce: 1
   _downforce: 3000
-  _useSteerHelper: 0
-  _useVfxCarSmoke: 0
-  _useVfxCarSkidmark: 0
-  _frontLeftWheelCollider: {fileID: 7657905970992002567}
-  _frontRightWheelCollider: {fileID: 7707933181805981301}
-  _backLeftWheelCollider: {fileID: 270898805263259575}
-  _backRightWheelCollider: {fileID: 5424818279817026606}
+  _useSteerHelper: 1
+  _useVfxCarSmoke: 1
+  _useVfxCarSkidmark: 1
+  _frontLeftWC: {fileID: 7657905970992002567}
+  _frontRightWC: {fileID: 7707933181805981301}
+  _rearLeftWC: {fileID: 270898805263259575}
+  _rearRightWC: {fileID: 5424818279817026606}
   _frontLeftWheelMesh: {fileID: 288835749619202467}
   _frontRightWheelMesh: {fileID: 479394767493666671}
   _backLeftWheelMesh: {fileID: 8789044526526958474}
@@ -1821,7 +1822,7 @@ GameObject:
   - component: {fileID: 5830427575764317931}
   - component: {fileID: 270898805263259575}
   m_Layer: 0
-  m_Name: BackLeftWheelCollider
+  m_Name: RL_WC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2292,7 +2293,7 @@ GameObject:
   - component: {fileID: 1808394075062055301}
   - component: {fileID: 7707933181805981301}
   m_Layer: 0
-  m_Name: FrontRightWheelCollider
+  m_Name: FR_WC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

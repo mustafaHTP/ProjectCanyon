@@ -1110,6 +1110,26 @@ PrefabInstance:
       propertyPath: _frontRightWC
       value: 
       objectReference: {fileID: 207724806}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _useDownforce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _useSteerHelper
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _useVfxCarSmoke
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _useVfxCarSkidmark
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _useManualWheelConfig
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4555682028012553721, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_Name
       value: FL_WC

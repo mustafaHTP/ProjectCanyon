@@ -3,38 +3,57 @@ using UnityEngine;
 
 public class CarSkidMarkController : MonoBehaviour
 {
-    [Header("SkidMark Effects")]
-    [SerializeField] private List<TrailRenderer> skidMarkEffects;
+    [SerializeField] private List<TrailRenderer> _skidMarkVFX;
 
-    [Header("Wheel Colliders")]
-    [SerializeField] private List<WheelCollider> wheelColliders;
-
+    private CarController _carController;
     private CarSoundController _carSoundController;
 
-    public void TurnOnEffect()
+    private void Awake()
     {
-        bool areAllWheelsGrounded = AreAllWheelsGrounded();
-
-        if (areAllWheelsGrounded)
+        if (!TryGetComponent(out _carController))
         {
-            foreach (var item in skidMarkEffects)
-            {
-                if (!item.emitting)
-                {
-                    item.emitting = true;
-                    _carSoundController.PlayTireScreechSFX();
-                }
-            }
+            Debug.LogError($"{nameof(CarController)} has not been found !");
         }
-        else
+        _carSoundController = GetComponent<CarSoundController>();
+    }
+
+    private void OnEnable()
+    {
+        _carController.OnGrip += CarController_OnGrip;
+        _carController.OnDrift += CarController_OnDrift;
+    }
+
+    private void OnDisable()
+    {
+        _carController.OnGrip -= CarController_OnGrip;
+        _carController.OnDrift -= CarController_OnDrift;
+    }
+
+    private void CarController_OnGrip()
+    {
+        DisableEffect();
+    }
+
+    private void CarController_OnDrift()
+    {
+        EnableEffect();
+    }
+
+    private void EnableEffect()
+    {
+        foreach (var item in _skidMarkVFX)
         {
-            TurnOffEffect();
+            if (!item.emitting)
+            {
+                item.emitting = true;
+                _carSoundController.PlayTireScreechSFX();
+            }
         }
     }
 
-    public void TurnOffEffect()
+    private void DisableEffect()
     {
-        foreach (var item in skidMarkEffects)
+        foreach (var item in _skidMarkVFX)
         {
             if (item.emitting)
             {
@@ -42,23 +61,5 @@ public class CarSkidMarkController : MonoBehaviour
                 _carSoundController.StopTireScreechSFX();
             }
         }
-    }
-
-    private void Awake()
-    {
-        _carSoundController = GetComponent<CarSoundController>();
-    }
-
-    private bool AreAllWheelsGrounded()
-    {
-        foreach (var wheel in wheelColliders)
-        {
-            if (!wheel.isGrounded)
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

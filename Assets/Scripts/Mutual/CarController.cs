@@ -66,9 +66,7 @@ public class CarController : MonoBehaviour
     private const float MinMotorTorque = 0f;
     private const float MinBrakeTorque = 0f;
 
-    private CarSkidMarkController _skidMarkController;
     private CarSmokeController _carSmokeController;
-    private CarLightController _lightController;
     private CarSoundController _carSoundController;
     private IInput _input;
     private Rigidbody _carRigidBody;
@@ -76,6 +74,8 @@ public class CarController : MonoBehaviour
 
     #region CAR_EVENTS
     public event Action<bool> OnBrake;
+    public event Action OnGrip;
+    public event Action OnDrift;
     #endregion
 
     #region Handling
@@ -126,8 +126,6 @@ public class CarController : MonoBehaviour
     {
         GetSidewaysFrictionInitialValues();
 
-        _lightController = GetComponent<CarLightController>();
-        _skidMarkController = GetComponent<CarSkidMarkController>();
         _carSmokeController = GetComponent<CarSmokeController>();
         _carSoundController = GetComponent<CarSoundController>();
         _carRigidBody = GetComponent<Rigidbody>();
@@ -235,16 +233,24 @@ public class CarController : MonoBehaviour
 
         if (_isDrifting)
         {
+            //To not maintain drift
             if (Mathf.Abs(driftAxis) < _driftThreshold
                 || _carRigidBody.velocity.magnitude <= _minSpeedToDrift
                 || !AreWheelsGrounded())
             {
                 _isDrifting = false;
+
+                OnGrip?.Invoke();
             }
+            else
+            {
+                OnDrift?.Invoke();
+            }
+
         }
         else
         {
-            _skidMarkController.TurnOffEffect();
+            //_skidMarkController.DisableEffect();
             _carSmokeController.TurnOffEffect();
             Grip();
         }
@@ -268,7 +274,9 @@ public class CarController : MonoBehaviour
             _isDrifting = true;
             Drift();
 
-            if (_useVfxCarSkidmark) _skidMarkController.TurnOnEffect();
+            OnDrift?.Invoke();
+
+            if (_useVfxCarSkidmark) //_skidMarkController.EnableEffect();
             if (_useVfxCarSmoke) _carSmokeController.TurnOnEffect();
         }
         else
@@ -276,7 +284,9 @@ public class CarController : MonoBehaviour
             _isDrifting = false;
             Grip();
 
-            _skidMarkController.TurnOffEffect();
+            OnGrip?.Invoke();
+
+            //_skidMarkController.DisableEffect();
             _carSmokeController.TurnOffEffect();
         }
     }
