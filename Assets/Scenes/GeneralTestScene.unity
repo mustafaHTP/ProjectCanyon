@@ -411,6 +411,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1a94cb036746b54cb4b2629bf5a0c90, type: 3}
+--- !u!146 &96249464 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 5424818279817026606, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+  m_PrefabInstance: {fileID: 1344591327}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &201498377
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,6 +522,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!146 &207724806 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 7707933181805981301, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+  m_PrefabInstance: {fileID: 1344591327}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &532862880
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -795,7 +805,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 177840641934487104, guid: 520905d815726b84cb9361c61bb7a021, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9701036
+      value: 0.97010356
       objectReference: {fileID: 0}
     - target: {fileID: 177840641934487104, guid: 520905d815726b84cb9361c61bb7a021, type: 3}
       propertyPath: m_LocalRotation.x
@@ -807,7 +817,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 177840641934487104, guid: 520905d815726b84cb9361c61bb7a021, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.021280237
+      value: -0.02128024
       objectReference: {fileID: 0}
     - target: {fileID: 1438869164249046363, guid: 520905d815726b84cb9361c61bb7a021, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1084,15 +1094,52 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _rearLeftWC
+      value: 
+      objectReference: {fileID: 1680742912}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _frontLeftWC
+      value: 
+      objectReference: {fileID: 1427117328}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _rearRightWC
+      value: 
+      objectReference: {fileID: 96249464}
+    - target: {fileID: 3939325408800439286, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _frontRightWC
+      value: 
+      objectReference: {fileID: 207724806}
+    - target: {fileID: 4555682028012553721, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_Name
+      value: FL_WC
+      objectReference: {fileID: 0}
+    - target: {fileID: 6230018984173539503, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_Name
+      value: RR_WC
+      objectReference: {fileID: 0}
     - target: {fileID: 7229190191780136019, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: m_Name
       value: PlayerCar
+      objectReference: {fileID: 0}
+    - target: {fileID: 7645980993974942953, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_Name
+      value: RL_WC
+      objectReference: {fileID: 0}
+    - target: {fileID: 8867870585121409350, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: m_Name
+      value: FR_WC
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+--- !u!146 &1427117328 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 7657905970992002567, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+  m_PrefabInstance: {fileID: 1344591327}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1616262887
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,6 +1245,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!146 &1680742912 stripped
+WheelCollider:
+  m_CorrespondingSourceObject: {fileID: 270898805263259575, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+  m_PrefabInstance: {fileID: 1344591327}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1697078097
 GameObject:
   m_ObjectHideFlags: 0

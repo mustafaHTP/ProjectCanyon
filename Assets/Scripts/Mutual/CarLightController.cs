@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class CarLightController : MonoBehaviour
@@ -9,27 +10,21 @@ public class CarLightController : MonoBehaviour
 
     private bool _isHeadlightOn = true;
     private IInput _input;
-
-    public void TurnOnBackLights()
-    {
-        for (var i = 0; i < backLightFlares.Count; ++i)
-        {
-            backLightFlares[i].enabled = true;
-        }
-    }
-
-    public void TurnOffBackLights()
-    {
-        for (var i = 0; i < backLightFlares.Count; ++i)
-        {
-            backLightFlares[i].enabled = false;
-        }
-    }
+    private CarController _carController;
 
     private void Awake()
     {
         _input = GetComponent<IInput>();
+        if(!TryGetComponent<CarController>(out _carController))
+        {
+            Debug.LogError($"{nameof(CarController)} has not been found !");
+        }
         InitHeadlight();
+    }
+
+    private void OnEnable()
+    {
+        _carController.OnBrake += CarController_OnBrake;
     }
 
     private void Update()
@@ -38,6 +33,16 @@ public class CarLightController : MonoBehaviour
         {
             ToggleHeadlight();
         }
+    }
+
+    private void OnDisable()
+    {
+        _carController.OnBrake -= CarController_OnBrake;
+    }
+
+    private void CarController_OnBrake(bool isBraking)
+    {
+        ToggleBackLights(isBraking);
     }
 
     private void InitHeadlight()
@@ -65,6 +70,14 @@ public class CarLightController : MonoBehaviour
         foreach (var item in headlightFlares)
         {
             item.enabled = _isHeadlightOn;
+        }
+    }
+
+    private void ToggleBackLights(bool isBraking)
+    {
+        for (var i = 0; i < backLightFlares.Count; ++i)
+        {
+            backLightFlares[i].enabled = isBraking;
         }
     }
 }

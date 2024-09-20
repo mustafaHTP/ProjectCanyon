@@ -7,6 +7,9 @@ public class CarController : MonoBehaviour
 {
     public const float MinSpeed = 0f;
 
+    [Header("Experimental")]
+    [SerializeField] private float _handbrakeTorque;
+
     [Header("Debug")]
     [Space(5)]
     [SerializeField] private bool _useManualWheelConfig;
@@ -17,10 +20,10 @@ public class CarController : MonoBehaviour
     [SerializeField] private bool _useVfxCarSkidmark;
 
     [Header("Wheel Colliders")]
-    [SerializeField] private WheelCollider _frontLeftWheelCollider;
-    [SerializeField] private WheelCollider _frontRightWheelCollider;
-    [SerializeField] private WheelCollider _backLeftWheelCollider;
-    [SerializeField] private WheelCollider _backRightWheelCollider;
+    [SerializeField] private WheelCollider _frontLeftWC;
+    [SerializeField] private WheelCollider _frontRightWC;
+    [SerializeField] private WheelCollider _rearLeftWC;
+    [SerializeField] private WheelCollider _rearRightWC;
 
     [Header("Wheel Meshes")]
     [SerializeField] private Transform _frontLeftWheelMesh;
@@ -71,6 +74,10 @@ public class CarController : MonoBehaviour
     private Rigidbody _carRigidBody;
     private float _currentSpeed;
 
+    #region CAR_EVENTS
+    public event Action<bool> OnBrake;
+    #endregion
+
     #region Handling
 
     private const float DefaultFrontStiffness = 2.5f;
@@ -109,10 +116,10 @@ public class CarController : MonoBehaviour
     public bool IsDrifting => _isDrifting;
     public float TopSpeed => _topSpeed;
     public float CurrentSpeed => _currentSpeed;
-    public WheelCollider FrontLeftWheelCollider => _frontLeftWheelCollider;
-    public WheelCollider FrontRightWheelCollider => _frontRightWheelCollider;
-    public WheelCollider BackLeftWheelCollider => _backLeftWheelCollider;
-    public WheelCollider BackRightWheelCollider => _backRightWheelCollider;
+    public WheelCollider FrontLeftWC => _frontLeftWC;
+    public WheelCollider FrontRightWC => _frontRightWC;
+    public WheelCollider RearLeftWC => _rearLeftWC;
+    public WheelCollider RearRightWC => _rearRightWC;
     #endregion
 
     private void Awake()
@@ -161,10 +168,10 @@ public class CarController : MonoBehaviour
     {
         float targetSteerAngle = _maxSteerAngle * _input.FrameInput.SteerInput;
 
-        FrontLeftWheelCollider.steerAngle =
-            Mathf.Lerp(FrontLeftWheelCollider.steerAngle, targetSteerAngle, _steerSensitivity);
-        FrontRightWheelCollider.steerAngle =
-            Mathf.Lerp(FrontLeftWheelCollider.steerAngle, targetSteerAngle, _steerSensitivity);
+        FrontLeftWC.steerAngle =
+            Mathf.Lerp(FrontLeftWC.steerAngle, targetSteerAngle, _steerSensitivity);
+        FrontRightWC.steerAngle =
+            Mathf.Lerp(FrontLeftWC.steerAngle, targetSteerAngle, _steerSensitivity);
     }
 
     private void Brake()
@@ -172,28 +179,16 @@ public class CarController : MonoBehaviour
         if (_isApplyingReverseTorque)
         {
             ApplyBrakeTorque(MinBrakeTorque);
-            _lightController.TurnOffBackLights();
+            OnBrake?.Invoke(false);
 
             return;
         }
 
-        bool isBraking = _input.FrameInput.BrakeInput switch
-        {
-            0f => false,
-            _ => true
-        };
-
-        if (isBraking)
-        {
-            _lightController.TurnOnBackLights();
-        }
-        else
-        {
-            _lightController.TurnOffBackLights();
-        }
-
         float torqueToBeApplied = _brakeTorque * _input.FrameInput.BrakeInput;
         ApplyBrakeTorque(torqueToBeApplied);
+
+        bool isBraking = torqueToBeApplied > 0f;
+        OnBrake?.Invoke(isBraking);
     }
 
     private void Gas()
@@ -312,46 +307,46 @@ public class CarController : MonoBehaviour
         switch (_axleType)
         {
             case AxleType.FWD:
-                FrontLeftWheelCollider.motorTorque = FrontLeftWheelCollider.isGrounded switch
+                FrontLeftWC.motorTorque = FrontLeftWC.isGrounded switch
                 {
                     true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                FrontRightWheelCollider.motorTorque = FrontRightWheelCollider.isGrounded switch
+                FrontRightWC.motorTorque = FrontRightWC.isGrounded switch
                 {
                     true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
                 break;
             case AxleType.RWD:
-                BackLeftWheelCollider.motorTorque = BackLeftWheelCollider.isGrounded switch
+                RearLeftWC.motorTorque = RearLeftWC.isGrounded switch
                 {
                     true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                BackRightWheelCollider.motorTorque = BackRightWheelCollider.isGrounded switch
+                RearRightWC.motorTorque = RearRightWC.isGrounded switch
                 {
                     true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
                 break;
             case AxleType.AWD:
-                FrontLeftWheelCollider.motorTorque = FrontLeftWheelCollider.isGrounded switch
+                FrontLeftWC.motorTorque = FrontLeftWC.isGrounded switch
                 {
                     true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                FrontRightWheelCollider.motorTorque = FrontRightWheelCollider.isGrounded switch
+                FrontRightWC.motorTorque = FrontRightWC.isGrounded switch
                 {
                     true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                BackLeftWheelCollider.motorTorque = BackLeftWheelCollider.isGrounded switch
+                RearLeftWC.motorTorque = RearLeftWC.isGrounded switch
                 {
                     true => motorTorqueAmount,
                     _ => MinMotorTorque
                 };
-                BackRightWheelCollider.motorTorque = BackRightWheelCollider.isGrounded switch
+                RearRightWC.motorTorque = RearRightWC.isGrounded switch
                 {
                     true => motorTorqueAmount,
                     _ => MinMotorTorque
@@ -362,8 +357,10 @@ public class CarController : MonoBehaviour
 
     private void ApplyBrakeTorque(float brakeTorqueAmount)
     {
-        BackLeftWheelCollider.brakeTorque = brakeTorqueAmount;
-        BackRightWheelCollider.brakeTorque = brakeTorqueAmount;
+        FrontLeftWC.brakeTorque = brakeTorqueAmount;
+        FrontRightWC.brakeTorque = brakeTorqueAmount;
+        RearLeftWC.brakeTorque = brakeTorqueAmount;
+        RearRightWC.brakeTorque = brakeTorqueAmount; 
     }
 
     private bool IsCarAboutToStop()
@@ -406,21 +403,21 @@ public class CarController : MonoBehaviour
 
     private void GetSidewaysFrictionInitialValues()
     {
-        _initialExtremumSlip = FrontLeftWheelCollider.sidewaysFriction.extremumSlip;
-        _initialExtremumValue = FrontLeftWheelCollider.sidewaysFriction.extremumValue;
-        _initialAsymptoteSlip = FrontLeftWheelCollider.sidewaysFriction.asymptoteSlip;
-        _initialAsymptoteValue = FrontLeftWheelCollider.sidewaysFriction.asymptoteValue;
-        _initialRearStiffness = BackLeftWheelCollider.sidewaysFriction.stiffness;
+        _initialExtremumSlip = FrontLeftWC.sidewaysFriction.extremumSlip;
+        _initialExtremumValue = FrontLeftWC.sidewaysFriction.extremumValue;
+        _initialAsymptoteSlip = FrontLeftWC.sidewaysFriction.asymptoteSlip;
+        _initialAsymptoteValue = FrontLeftWC.sidewaysFriction.asymptoteValue;
+        _initialRearStiffness = RearLeftWC.sidewaysFriction.stiffness;
     }
 
     private List<WheelCollider> GetWheelCollidersAsList()
     {
         List<WheelCollider> wheelColliders = new()
         {
-            FrontLeftWheelCollider,
-            FrontRightWheelCollider,
-            BackLeftWheelCollider,
-            BackRightWheelCollider
+            FrontLeftWC,
+            FrontRightWC,
+            RearLeftWC,
+            RearRightWC
         };
 
         return wheelColliders;
@@ -445,22 +442,22 @@ public class CarController : MonoBehaviour
 
         //APPLY STIFFNESS
         //Front Wheels
-        WheelFrictionCurve frictionCurve = FrontLeftWheelCollider.sidewaysFriction;
+        WheelFrictionCurve frictionCurve = FrontLeftWC.sidewaysFriction;
         frictionCurve.stiffness = _frontStiffnessDrift;
-        FrontLeftWheelCollider.sidewaysFriction = frictionCurve;
+        FrontLeftWC.sidewaysFriction = frictionCurve;
 
-        frictionCurve = FrontRightWheelCollider.sidewaysFriction;
+        frictionCurve = FrontRightWC.sidewaysFriction;
         frictionCurve.stiffness = _frontStiffnessDrift;
-        FrontRightWheelCollider.sidewaysFriction = frictionCurve;
+        FrontRightWC.sidewaysFriction = frictionCurve;
 
         //Back Wheels
-        frictionCurve = BackLeftWheelCollider.sidewaysFriction;
+        frictionCurve = RearLeftWC.sidewaysFriction;
         frictionCurve.stiffness = _backStiffnessDrift;
-        BackLeftWheelCollider.sidewaysFriction = frictionCurve;
+        RearLeftWC.sidewaysFriction = frictionCurve;
 
-        frictionCurve = BackRightWheelCollider.sidewaysFriction;
+        frictionCurve = RearRightWC.sidewaysFriction;
         frictionCurve.stiffness = _backStiffnessDrift;
-        BackRightWheelCollider.sidewaysFriction = frictionCurve;
+        RearRightWC.sidewaysFriction = frictionCurve;
     }
 
     /// <summary>
@@ -485,32 +482,32 @@ public class CarController : MonoBehaviour
 
         //APPLY STIFFNESS
         //Front Wheels
-        WheelFrictionCurve frictionCurve = FrontLeftWheelCollider.sidewaysFriction;
+        WheelFrictionCurve frictionCurve = FrontLeftWC.sidewaysFriction;
         //frictionCurve.stiffness = _initialFrontStiffness;
         frictionCurve.stiffness = _currentFrontStiffness;
-        FrontLeftWheelCollider.sidewaysFriction = frictionCurve;
+        FrontLeftWC.sidewaysFriction = frictionCurve;
 
-        frictionCurve = FrontRightWheelCollider.sidewaysFriction;
+        frictionCurve = FrontRightWC.sidewaysFriction;
         //frictionCurve.stiffness = _initialFrontStiffness;
         frictionCurve.stiffness = _currentFrontStiffness;
-        FrontRightWheelCollider.sidewaysFriction = frictionCurve;
+        FrontRightWC.sidewaysFriction = frictionCurve;
 
         //Back Wheels
-        frictionCurve = BackLeftWheelCollider.sidewaysFriction;
+        frictionCurve = RearLeftWC.sidewaysFriction;
         frictionCurve.stiffness = _initialRearStiffness;
-        BackLeftWheelCollider.sidewaysFriction = frictionCurve;
+        RearLeftWC.sidewaysFriction = frictionCurve;
 
-        frictionCurve = BackRightWheelCollider.sidewaysFriction;
+        frictionCurve = RearRightWC.sidewaysFriction;
         frictionCurve.stiffness = _initialRearStiffness;
-        BackRightWheelCollider.sidewaysFriction = frictionCurve;
+        RearRightWC.sidewaysFriction = frictionCurve;
     }
 
     private void SyncWheelMeshesWithColliders()
     {
-        SyncWheelMeshWithCollider(FrontLeftWheelCollider, _frontLeftWheelMesh);
-        SyncWheelMeshWithCollider(FrontRightWheelCollider, _frontRightWheelMesh);
-        SyncWheelMeshWithCollider(BackLeftWheelCollider, _backLeftWheelMesh);
-        SyncWheelMeshWithCollider(BackRightWheelCollider, _backRightWheelMesh);
+        SyncWheelMeshWithCollider(FrontLeftWC, _frontLeftWheelMesh);
+        SyncWheelMeshWithCollider(FrontRightWC, _frontRightWheelMesh);
+        SyncWheelMeshWithCollider(RearLeftWC, _backLeftWheelMesh);
+        SyncWheelMeshWithCollider(RearRightWC, _backRightWheelMesh);
     }
 
     private void SyncWheelMeshWithCollider(WheelCollider wheelCollider, Transform wheelMesh)

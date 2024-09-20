@@ -61,8 +61,8 @@ public class DebugPanel : MonoBehaviour, IPanel
             }
         }
 
-        _frontWheelCollider = _carController.FrontLeftWheelCollider;
-        _backWheelCollider = _carController.BackLeftWheelCollider;
+        _frontWheelCollider = _carController.FrontLeftWC;
+        _backWheelCollider = _carController.RearLeftWC;
         _carRigidbody = _carController.GetComponent<Rigidbody>();
         _input = _carController.GetComponent<IInput>();
     }
@@ -138,13 +138,13 @@ public class DebugPanel : MonoBehaviour, IPanel
     private void DisplaySlipValues()
     {
         WheelHit frontWheelHit;
-        if (_carController.FrontLeftWheelCollider.GetGroundHit(out frontWheelHit))
+        if (_carController.FrontLeftWC.GetGroundHit(out frontWheelHit))
         {
             print($"FL==>Fwd Slip:{Mathf.Abs(frontWheelHit.forwardSlip):N2}, Side Slip:{Mathf.Abs(frontWheelHit.sidewaysSlip):N2}");
         }
 
         WheelHit backWheelHit;
-        if (_carController.BackLeftWheelCollider.GetGroundHit(out backWheelHit))
+        if (_carController.RearLeftWC.GetGroundHit(out backWheelHit))
         {
             print($"BL==>Fwd Slip:{Mathf.Abs(backWheelHit.forwardSlip):N2} , Side Slip: {Mathf.Abs(backWheelHit.sidewaysSlip):N2}");
         }
