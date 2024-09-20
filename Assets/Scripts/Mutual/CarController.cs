@@ -66,7 +66,6 @@ public class CarController : MonoBehaviour
     private const float MinMotorTorque = 0f;
     private const float MinBrakeTorque = 0f;
 
-    private CarSmokeController _carSmokeController;
     private CarSoundController _carSoundController;
     private IInput _input;
     private Rigidbody _carRigidBody;
@@ -126,7 +125,6 @@ public class CarController : MonoBehaviour
     {
         GetSidewaysFrictionInitialValues();
 
-        _carSmokeController = GetComponent<CarSmokeController>();
         _carSoundController = GetComponent<CarSoundController>();
         _carRigidBody = GetComponent<Rigidbody>();
         _input = GetComponent<IInput>();
@@ -250,8 +248,6 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            //_skidMarkController.DisableEffect();
-            _carSmokeController.TurnOffEffect();
             Grip();
         }
 
@@ -275,9 +271,6 @@ public class CarController : MonoBehaviour
             Drift();
 
             OnDrift?.Invoke();
-
-            if (_useVfxCarSkidmark) //_skidMarkController.EnableEffect();
-            if (_useVfxCarSmoke) _carSmokeController.TurnOnEffect();
         }
         else
         {
@@ -285,9 +278,6 @@ public class CarController : MonoBehaviour
             Grip();
 
             OnGrip?.Invoke();
-
-            //_skidMarkController.DisableEffect();
-            _carSmokeController.TurnOffEffect();
         }
     }
 
