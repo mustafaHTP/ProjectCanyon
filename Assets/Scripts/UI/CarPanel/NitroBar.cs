@@ -20,7 +20,7 @@ public class NitroBar : MonoBehaviour
             Debug.LogError($"{nameof(CarNitroController)} has not been found !");
         }
         UpdateFillValue();
-        ChangeColorNitroBar(true);
+        ChangeColorNitroBar(false);
     }
 
     private void OnEnable()

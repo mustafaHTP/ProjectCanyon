@@ -29,10 +29,8 @@ public class CarNitroController : MonoBehaviour
     private const float MinNitroAmount = 0f;
 
     private CarController _carController;
-    private CarSoundController _carSoundController;
     private IInput _input;
     private float _currentNitroAmount;
-    private bool _isUsingNitro;
     private float _nitroActivationThreshold;
 
     #region NITRO STATE
@@ -52,16 +50,16 @@ public class CarNitroController : MonoBehaviour
     public float MaxNitroAmount { get => _maxNitroAmount; }
     public float NitroReductionAmount { get => _nitroReductionAmount; }
     public float CurrentNitroAmount { get => _currentNitroAmount; }
-    public bool IsUsingNitro { get => _isUsingNitro; }
     #endregion
 
     private void Awake()
     {
         _carController = GetComponent<CarController>();
-        _carSoundController = GetComponent<CarSoundController>();
         _input = GetComponent<IInput>();
         _currentNitroAmount = MinNitroAmount;
         _nitroActivationThreshold = CalculateNitroActivationThreshold();
+
+        DisableEffect();
     }
 
     private void Update()
@@ -160,8 +158,6 @@ public class CarNitroController : MonoBehaviour
     #region FILL STATE
     private void PerformFillState()
     {
-        //_carSoundController.StopNitroSFX();
-        DisableEffect();
         IncreaseNitro();
     }
 
