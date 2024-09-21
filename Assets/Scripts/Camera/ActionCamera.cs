@@ -32,10 +32,11 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
 
     private CinemachineVirtualCamera _actionCamera;
     private Rigidbody _carRigidbody;
-    private CarNitroController _nitroController;
+    private CarNitroController _carNitroController;
     private CarController _carController;
     private IInput _input;
     private float _deltaDamping = 0f;
+    private bool _isNitroActivated;
 
     public void PerformCameraLogic()
     {
@@ -62,15 +63,27 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
 
         _actionCamera = GetComponent<CinemachineVirtualCamera>();
         _carRigidbody = _carController.GetComponent<Rigidbody>();
-        _nitroController = _carController.GetComponent<CarNitroController>();
+        _carNitroController = _carController.GetComponent<CarNitroController>();
         _input = _carController.GetComponent<IInput>();
+    }
+
+    private void OnEnable()
+    {
+        _carNitroController.OnNitroActivated += CarNitroController_OnNitroActivated;
+        _carNitroController.OnNitroDeactivated += CarNitroController_OnNitroDeactivated;
+    }
+
+    private void OnDisable()
+    {
+        _carNitroController.OnNitroActivated -= CarNitroController_OnNitroActivated;
+        _carNitroController.OnNitroDeactivated -= CarNitroController_OnNitroDeactivated;
     }
 
     private void ApplyDriftBehavior()
     {
         if (!_applyDriftBehavior) return;
 
-        float driftDirection = GetDriftDirection();
+        float driftDirection = _carController.GetDriftDirection();
         float currentTrackedOffsetX = 
             _actionCamera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset.x;
         float newTargetTrackedObjectOffsetX = -1f * driftDirection * _trackedObjectOffsetX;
@@ -95,7 +108,7 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
     {
         if (!_applyNitroBehavior) return;
 
-        if (_nitroController.IsUsingNitro)
+        if (_isNitroActivated)
         {
             _actionCamera.m_Lens.FieldOfView = Mathf.Lerp(
                 _actionCamera.m_Lens.FieldOfView,
@@ -151,8 +164,13 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
             Mathf.Lerp(0f, _throttleDamping.z, _deltaDamping);
     }
 
-    private float GetDriftDirection()
+    private void CarNitroController_OnNitroDeactivated()
     {
-        return Vector3.Dot(_carRigidbody.velocity.normalized, _carRigidbody.transform.right.normalized);
+        _isNitroActivated = false;
+    }
+
+    private void CarNitroController_OnNitroActivated()
+    {
+        _isNitroActivated = true;
     }
 }

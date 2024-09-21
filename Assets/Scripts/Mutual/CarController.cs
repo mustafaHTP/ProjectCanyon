@@ -68,10 +68,11 @@ public class CarController : MonoBehaviour
 
     private CarSoundController _carSoundController;
     private IInput _input;
-    private Rigidbody _carRigidBody;
+    private Rigidbody _carRigidbody;
     private float _currentSpeed;
 
     #region CAR_EVENTS
+    public event Action<bool> OnGas;
     public event Action<bool> OnBrake;
     public event Action OnGrip;
     public event Action OnDrift;
@@ -121,12 +122,22 @@ public class CarController : MonoBehaviour
     public WheelCollider RearRightWC => _rearRightWC;
     #endregion
 
+    public float GetDriftDirection()
+    {
+        if(_carRigidbody == null)
+        {
+            Debug.LogError($"{nameof(Rigidbody)} has not been found");
+        }
+
+        return Vector3.Dot(_carRigidbody.velocity.normalized, _carRigidbody.transform.right.normalized);
+    }
+
     private void Awake()
     {
         GetSidewaysFrictionInitialValues();
 
         _carSoundController = GetComponent<CarSoundController>();
-        _carRigidBody = GetComponent<Rigidbody>();
+        _carRigidbody = GetComponent<Rigidbody>();
         _input = GetComponent<IInput>();
     }
 
@@ -142,8 +153,8 @@ public class CarController : MonoBehaviour
         SyncWheelMeshesWithColliders();
 
 
-        _currentSpeed = _carRigidBody.velocity.magnitude;
-        if (_useDownforce) _carRigidBody.AddForce(_downforce * -1f * transform.up);
+        _currentSpeed = _carRigidbody.velocity.magnitude;
+        if (_useDownforce) _carRigidbody.AddForce(_downforce * -1f * transform.up);
     }
 
     private void HelpSteer()
@@ -155,7 +166,7 @@ public class CarController : MonoBehaviour
             return;
         }
 
-        float currentSpeed = _carRigidBody.velocity.magnitude;
+        float currentSpeed = _carRigidbody.velocity.magnitude;
         float steerValue = currentSpeed / _topSpeed;
         _currentFrontStiffness = frontWheelsStiffnessCurve.Evaluate(steerValue);
     }
@@ -183,7 +194,7 @@ public class CarController : MonoBehaviour
         float torqueToBeApplied = _brakeTorque * _input.FrameInput.BrakeInput;
         ApplyBrakeTorque(torqueToBeApplied);
 
-        bool isBraking = torqueToBeApplied > 0f;
+        bool isBraking = torqueToBeApplied > MinBrakeTorque;
         OnBrake?.Invoke(isBraking);
     }
 
@@ -208,6 +219,9 @@ public class CarController : MonoBehaviour
         }
 
         ApplyMotorTorque(torqueToBeApplied);
+
+        bool isGassing = Mathf.Abs(torqueToBeApplied) > MinMotorTorque;
+        OnGas?.Invoke(isGassing);
     }
 
     private void Handbrake()
@@ -227,13 +241,13 @@ public class CarController : MonoBehaviour
 
     private void HandleHandbrakeReleased()
     {
-        float driftAxis = Vector3.Dot(_carRigidBody.velocity.normalized, _carRigidBody.transform.right);
+        float driftAxis = Vector3.Dot(_carRigidbody.velocity.normalized, _carRigidbody.transform.right);
 
         if (_isDrifting)
         {
             //To not maintain drift
             if (Mathf.Abs(driftAxis) < _driftThreshold
-                || _carRigidBody.velocity.magnitude <= _minSpeedToDrift
+                || _carRigidbody.velocity.magnitude <= _minSpeedToDrift
                 || !AreWheelsGrounded())
             {
                 _isDrifting = false;
@@ -263,9 +277,9 @@ public class CarController : MonoBehaviour
         }
 
         // Simulate braking
-        _carRigidBody.AddForce(_carRigidBody.velocity * -1f * _handbrakeForce);
+        _carRigidbody.AddForce(_carRigidbody.velocity * -1f * _handbrakeForce);
 
-        if (_carRigidBody.velocity.magnitude > _minSpeedToDrift && AreWheelsGrounded())
+        if (_carRigidbody.velocity.magnitude > _minSpeedToDrift && AreWheelsGrounded())
         {
             _isDrifting = true;
             Drift();
@@ -365,7 +379,7 @@ public class CarController : MonoBehaviour
 
     private bool IsCarAboutToStop()
     {
-        return _carRigidBody.velocity.magnitude < 0.1f;
+        return _carRigidbody.velocity.magnitude < 0.1f;
     }
 
     /// <summary>
@@ -398,7 +412,7 @@ public class CarController : MonoBehaviour
 
     private bool HasExceededTopSpeed()
     {
-        return _carRigidBody.velocity.magnitude > TopSpeed;
+        return _carRigidbody.velocity.magnitude > TopSpeed;
     }
 
     private void GetSidewaysFrictionInitialValues()

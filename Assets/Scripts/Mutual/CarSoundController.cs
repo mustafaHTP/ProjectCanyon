@@ -18,12 +18,39 @@ public class CarSoundController : MonoBehaviour
     [SerializeField] private AudioSource _handbrakeSFX;
 
     private CarController _carController;
+    private CarNitroController _carNitroController;
     private IInput _input;
 
     private void Awake()
     {
-        _carController = GetComponent<CarController>();
+        if (!TryGetComponent(out _carController))
+        {
+            Debug.LogError($"{nameof(CarController)} has not been found !");
+        }
+        if (!TryGetComponent(out _carNitroController))
+        {
+            Debug.LogError($"{nameof(CarNitroController)} has not been found !");
+        }
         _input = GetComponent<IInput>();
+    }
+
+    private void OnEnable()
+    {
+        _carController.OnGrip += CarController_OnGrip;
+        _carController.OnDrift += CarController_OnDrift;
+
+        _carNitroController.OnNitroActivated += CarNitroController_OnNitroActivated;
+        _carNitroController.OnNitroDeactivated += CarNitroController_OnNitroDeactivated;
+    }
+
+    private void CarNitroController_OnNitroDeactivated()
+    {
+        StopNitroSFX();
+    }
+
+    private void CarNitroController_OnNitroActivated()
+    {
+        PlayNitroSFX();
     }
 
     private void FixedUpdate()
@@ -31,6 +58,28 @@ public class CarSoundController : MonoBehaviour
         PlayEngineSFX();
     }
 
+    private void OnDisable()
+    {
+        _carController.OnGrip -= CarController_OnGrip;
+        _carController.OnDrift -= CarController_OnDrift;
+
+        _carNitroController.OnNitroActivated -= CarNitroController_OnNitroActivated;
+        _carNitroController.OnNitroDeactivated -= CarNitroController_OnNitroDeactivated;
+    }
+
+    #region EVENT METHODS
+    private void CarController_OnGrip()
+    {
+        StopTireScreechSFX();
+    }
+
+    private void CarController_OnDrift()
+    {
+        PlayTireScreechSFX();
+    }
+    #endregion
+
+    #region SOUND METHODS
     public void PlayEngineSFX()
     {
         float minSpeed = CarController.MinSpeed;
@@ -68,7 +117,7 @@ public class CarSoundController : MonoBehaviour
         }
     }
 
-    public void PlayTireScreechSFX()
+    private void PlayTireScreechSFX()
     {
         if (!_tireScreechSFX.isPlaying)
         {
@@ -76,7 +125,7 @@ public class CarSoundController : MonoBehaviour
         }
     }
 
-    public void StopTireScreechSFX()
+    private void StopTireScreechSFX()
     {
         if (_tireScreechSFX.isPlaying)
         {
@@ -91,5 +140,5 @@ public class CarSoundController : MonoBehaviour
             _handbrakeSFX.Play();
         }
     }
-
+    #endregion
 }

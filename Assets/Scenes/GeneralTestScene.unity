@@ -1112,6 +1112,22 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6259610614737806554, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _nitroCooldownTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6259610614737806554, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _nitroActivateThreshold
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6259610614737806554, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _nitroRechargeDelayTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6259610614737806554, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
+      propertyPath: _nitroActivateThresholdMultiplier
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6466593399388102097, guid: a4fb7b723af5932499e97d817e2b58f8, type: 3}
       propertyPath: _skidMarkVFX.Array.size
       value: 2

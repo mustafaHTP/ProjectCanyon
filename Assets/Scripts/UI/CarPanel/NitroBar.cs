@@ -4,30 +4,49 @@ using UnityEngine.UI;
 
 public class NitroBar : MonoBehaviour
 {
+    [SerializeField] private Color _nitroEnteredCooldownColor;
+    [SerializeField] private Color _nitroExitedCooldownColor;
+
     private Transform _playerCar;
-    private Image _nitroBar;
-    private CarNitroController _nitroController;
+    private Image _nitroBarImage;
+    private CarNitroController _carNitroController;
 
     private void Awake()
     {
         FindPlayerCar();
+        _nitroBarImage = GetComponent<Image>();
+        if (!_playerCar.TryGetComponent(out _carNitroController))
+        {
+            Debug.LogError($"{nameof(CarNitroController)} has not been found !");
+        }
+        UpdateFillValue();
+        ChangeColorNitroBar(true);
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        _nitroBar = GetComponent<Image>();
-        _nitroController = _playerCar.GetComponent<CarNitroController>();
+        _carNitroController.OnNitroCooldown += CarNitroController_OnNitroCooldown;
     }
 
     private void Update()
     {
-        float currentNitroAmount = _nitroController.CurrentNitroAmount;
-        float maxNitroAmount = _nitroController.MaxNitroAmount;
-        float nitroReductionAmount = _nitroController.NitroReductionAmount;
+        UpdateFillValue();
+    }
+    
+    private void OnDisable()
+    {
+        _carNitroController.OnNitroCooldown -= CarNitroController_OnNitroCooldown;
+    }
+
+    private void UpdateFillValue()
+    {
+        float currentNitroAmount = _carNitroController.CurrentNitroAmount;
+        float maxNitroAmount = _carNitroController.MaxNitroAmount;
+        float nitroReductionAmount = _carNitroController.NitroReductionAmount;
 
         float mappedValue = Mathf.InverseLerp(nitroReductionAmount, maxNitroAmount, currentNitroAmount);
         float fillAmount = Mathf.Lerp(0f, 1f, mappedValue);
-        _nitroBar.fillAmount = fillAmount;
+        _nitroBarImage.fillAmount = fillAmount;
     }
 
     private void FindPlayerCar()
@@ -36,6 +55,23 @@ public class NitroBar : MonoBehaviour
         if (_playerCar == null)
         {
             Debug.LogError("Player car has not been found !");
+        }
+    }
+
+    private void CarNitroController_OnNitroCooldown(bool isOnCooldown)
+    {
+        ChangeColorNitroBar(isOnCooldown);
+    }
+
+    private void ChangeColorNitroBar(bool isOnCooldown)
+    {
+        if (isOnCooldown)
+        {
+            _nitroBarImage.color = _nitroEnteredCooldownColor;
+        }
+        else
+        {
+            _nitroBarImage.color = _nitroExitedCooldownColor;
         }
     }
 }

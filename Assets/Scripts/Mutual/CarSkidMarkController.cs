@@ -6,7 +6,6 @@ public class CarSkidMarkController : MonoBehaviour
     [SerializeField] private List<TrailRenderer> _skidMarkVFX;
 
     private CarController _carController;
-    private CarSoundController _carSoundController;
 
     private void Awake()
     {
@@ -14,7 +13,6 @@ public class CarSkidMarkController : MonoBehaviour
         {
             Debug.LogError($"{nameof(CarController)} has not been found !");
         }
-        _carSoundController = GetComponent<CarSoundController>();
     }
 
     private void OnEnable()
@@ -46,7 +44,6 @@ public class CarSkidMarkController : MonoBehaviour
             if (!item.emitting)
             {
                 item.emitting = true;
-                _carSoundController.PlayTireScreechSFX();
             }
         }
     }
@@ -58,7 +55,6 @@ public class CarSkidMarkController : MonoBehaviour
             if (item.emitting)
             {
                 item.emitting = false;
-                _carSoundController.StopTireScreechSFX();
             }
         }
     }
