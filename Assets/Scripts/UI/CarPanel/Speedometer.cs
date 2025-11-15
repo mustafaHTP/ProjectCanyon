@@ -50,7 +50,7 @@ public class Speedometer : MonoBehaviour
 
     private void RotateSpeedometerAndNitroBar()
     {
-        float mappedVelocity = Mathf.InverseLerp(0f, _topSpeed, _carRigidBody.velocity.magnitude);
+        float mappedVelocity = Mathf.InverseLerp(0f, _topSpeed, _carRigidBody.linearVelocity.magnitude);
         float targetRotation = Mathf.Lerp(_initalRotationX, _maxRotationX, mappedVelocity);
         transform.localRotation = Quaternion.Euler(targetRotation, 0f, 0f);
         _nitroBarRT.localRotation = Quaternion.Euler(targetRotation, 0f, 0f);

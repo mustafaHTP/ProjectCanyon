@@ -104,7 +104,7 @@ public class DebugPanel : MonoBehaviour, IPanel
 
     private void DisplaySpeed()
     {
-        float currentVelocity = _carRigidbody.velocity.magnitude;
+        float currentVelocity = _carRigidbody.linearVelocity.magnitude;
         _speedText.text = $"Speed: {currentVelocity:N2}";
     }
 
@@ -113,7 +113,7 @@ public class DebugPanel : MonoBehaviour, IPanel
         //Debug.DrawRay(carRb.transform.position, carRb.velocity * 50f, Color.green);
         //Debug.DrawRay(carRb.transform.position, carRb.transform.right * 50f, Color.yellow);
 
-        float direction = Vector3.Dot(_carRigidbody.velocity.normalized, _carRigidbody.transform.right.normalized);
+        float direction = Vector3.Dot(_carRigidbody.linearVelocity.normalized, _carRigidbody.transform.right.normalized);
         _driftDirectionText.text = $"Drift Dir: {direction:N2}";
     }
 

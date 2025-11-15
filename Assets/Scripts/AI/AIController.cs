@@ -261,7 +261,7 @@ public class AIController : MonoBehaviour, IInput
         Vector3 directionToWaypoint = (currentWaypoint.position - transform.position);
         float angleBetweenWaypoint = Vector3.Angle(transform.forward, directionToWaypoint);
 
-        float currentSpeed = GetComponent<Rigidbody>().velocity.magnitude;
+        float currentSpeed = GetComponent<Rigidbody>().linearVelocity.magnitude;
 
         if (distanceToWaypoint > _minDistanceToWaypointToBrake
             && angleBetweenWaypoint > _minAngleBetweenWaypointToBrake

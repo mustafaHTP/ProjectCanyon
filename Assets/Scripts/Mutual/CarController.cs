@@ -139,7 +139,7 @@ public class CarController : MonoBehaviour
         SyncWheelMeshesWithColliders();
 
 
-        _currentSpeed = _carRigidBody.velocity.magnitude;
+        _currentSpeed = _carRigidBody.linearVelocity.magnitude;
         if (_useDownforce) _carRigidBody.AddForce(_downforce * -1f * transform.up);
     }
 
@@ -152,7 +152,7 @@ public class CarController : MonoBehaviour
             return;
         }
 
-        float currentSpeed = _carRigidBody.velocity.magnitude;
+        float currentSpeed = _carRigidBody.linearVelocity.magnitude;
         float steerValue = currentSpeed / _topSpeed;
         _currentFrontStiffness = frontWheelsStiffnessCurve.Evaluate(steerValue);
     }
@@ -236,12 +236,12 @@ public class CarController : MonoBehaviour
 
     private void HandleHandbrakeReleased()
     {
-        float driftAxis = Vector3.Dot(_carRigidBody.velocity.normalized, _carRigidBody.transform.right);
+        float driftAxis = Vector3.Dot(_carRigidBody.linearVelocity.normalized, _carRigidBody.transform.right);
 
         if (_isDrifting)
         {
             if (Mathf.Abs(driftAxis) < _driftThreshold
-                || _carRigidBody.velocity.magnitude <= _minSpeedToDrift
+                || _carRigidBody.linearVelocity.magnitude <= _minSpeedToDrift
                 || !AreWheelsGrounded())
             {
                 _isDrifting = false;
@@ -266,9 +266,9 @@ public class CarController : MonoBehaviour
         }
 
         // Simulate braking
-        _carRigidBody.AddForce(_carRigidBody.velocity * -1f * _handbrakeForce);
+        _carRigidBody.AddForce(_carRigidBody.linearVelocity * -1f * _handbrakeForce);
 
-        if (_carRigidBody.velocity.magnitude > _minSpeedToDrift && AreWheelsGrounded())
+        if (_carRigidBody.linearVelocity.magnitude > _minSpeedToDrift && AreWheelsGrounded())
         {
             _isDrifting = true;
             Drift();
@@ -368,7 +368,7 @@ public class CarController : MonoBehaviour
 
     private bool IsCarAboutToStop()
     {
-        return _carRigidBody.velocity.magnitude < 0.1f;
+        return _carRigidBody.linearVelocity.magnitude < 0.1f;
     }
 
     /// <summary>
@@ -401,7 +401,7 @@ public class CarController : MonoBehaviour
 
     private bool HasExceededTopSpeed()
     {
-        return _carRigidBody.velocity.magnitude > TopSpeed;
+        return _carRigidBody.linearVelocity.magnitude > TopSpeed;
     }
 
     private void GetSidewaysFrictionInitialValues()

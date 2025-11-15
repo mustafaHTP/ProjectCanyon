@@ -31,7 +31,7 @@ public class CarTilter : MonoBehaviour
     {
         CarController carController = GetComponent<CarController>();
         float dotResult =
-            Vector3.Dot(_rigidbody.velocity, _rigidbody.transform.right.normalized);
+            Vector3.Dot(_rigidbody.linearVelocity, _rigidbody.transform.right.normalized);
         float inversedDotResult = Mathf.InverseLerp(carController.TopSpeed, -carController.TopSpeed, dotResult);
         float tiltAmount = Mathf.Lerp(-_maxTiltAngle, _maxTiltAngle, inversedDotResult);
 

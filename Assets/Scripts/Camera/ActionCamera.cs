@@ -118,7 +118,7 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
         float mappedVelocity = Mathf.InverseLerp(
             0f,
             _carController.TopSpeed,
-            _carRigidbody.velocity.magnitude);
+            _carRigidbody.linearVelocity.magnitude);
 
         float currentFrequencyGain = Mathf.Lerp(
             _minFrequencyGain,
@@ -153,6 +153,6 @@ public class ActionCamera : MonoBehaviour, ICinemachineCameraLogic
 
     private float GetDriftDirection()
     {
-        return Vector3.Dot(_carRigidbody.velocity.normalized, _carRigidbody.transform.right.normalized);
+        return Vector3.Dot(_carRigidbody.linearVelocity.normalized, _carRigidbody.transform.right.normalized);
     }
 }
