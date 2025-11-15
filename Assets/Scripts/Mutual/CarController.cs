@@ -9,7 +9,10 @@ public class CarController : MonoBehaviour
 
     [Header("Debug")]
     [Space(5)]
-    [SerializeField] private bool _useManualWheelConfig;
+    [SerializeField]
+    [Tooltip("If it is set to true, drift values will not be applied" +
+        " when drifting.")]
+    private bool _enableOverridingDriftValues;
     [SerializeField] private bool _useDownforce;
     [SerializeField] private float _downforce;
     [SerializeField] private bool _useSteerHelper;
@@ -41,7 +44,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private bool _isUsingBrakeToGoBack = false;
 
     /*
-     * Increase or decrease front wheels stiffness 
+     * Increase or decrease front wheels stiffness
      * according to car's speed
      * **/
     [Header("Steer Helper")]
@@ -428,7 +431,7 @@ public class CarController : MonoBehaviour
 
     private void Drift()
     {
-        if (_useManualWheelConfig) return;
+        if (_enableOverridingDriftValues) return;
 
         List<WheelCollider> wheelColliders = GetWheelCollidersAsList();
 
@@ -466,11 +469,11 @@ public class CarController : MonoBehaviour
     /// <summary>
     /// Both front and rear wheels have same initial values
     /// Except stiffness because rear wheels stiffness value causes
-    /// for front wheels too much grip 
+    /// for front wheels too much grip
     /// </summary>
     private void Grip()
     {
-        if (_useManualWheelConfig) return;
+        if (_enableOverridingDriftValues) return;
 
         List<WheelCollider> wheelColliders = GetWheelCollidersAsList();
         for (int i = 0; i < wheelColliders.Count; i++)
